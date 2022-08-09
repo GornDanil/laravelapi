@@ -2,10 +2,21 @@
 
 namespace App\Providers;
 
+use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
+use App\Services\Authentication\AuthenticationService;
+use App\Services\Departments\Abstracts\DepartmentsServiceInterface;
+use App\Services\Departments\DepartmentsService;
+use App\Services\Workers\Abstracts\WorkersServiceInterface;
+use App\Services\Workers\WorkersService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    protected array $mappings = [
+        AuthenticationServiceInterface::class => AuthenticationService::class,
+        DepartmentsServiceInterface::class => DepartmentsService::class,
+        WorkersServiceInterface::class => WorkersService::class,
+    ];
     /**
      * Register any application services.
      *
@@ -13,7 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        foreach ($this->mappings as $abstract => $concrete) {
+            $this->app->singleton($abstract, $concrete);
+        }
     }
 
     /**

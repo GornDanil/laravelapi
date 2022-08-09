@@ -4,13 +4,19 @@ namespace App\Providers;
 
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use App\Repositories\Authentication\UserRepository;
+use App\Repositories\Departments\Abstracts\DepartmentRepositoryInterface;
+use App\Repositories\Departments\DepartmentRepository;
+use App\Repositories\Workers\Abstracts\WorkersRepositoryInterface;
+use App\Repositories\Workers\WorkersRepository;
 use Illuminate\Support\ServiceProvider;
 
-class RepositoryProvaider extends ServiceProvider
+class RepositoryProvider extends ServiceProvider
 {
     /** @var string[] */
     protected array $mappings = [
         UserRepositoryInterface::class => UserRepository::class,
+        DepartmentRepositoryInterface::class => DepartmentRepository::class,
+        WorkersRepositoryInterface::class => WorkersRepository::class
     ];
 
     /**

@@ -17,6 +17,4 @@ class LoginDTO extends DTO
     /** @var string */
     public string $password;
 
-    /** @var Carbon  */
-    public Carbon $created_at;
 }

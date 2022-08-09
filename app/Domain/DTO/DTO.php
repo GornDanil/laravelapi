@@ -3,26 +3,41 @@
 
 namespace App\Domain\DTO;
 
+use Closure;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Atwinta\DTO\Exceptions\DtoException;
+use JsonSerializable;
+use ReflectionClass;
+use ReflectionProperty;
 
-class DTO extends \Atwinta\DTO\DTO
+class DTO implements Arrayable, Jsonable, JsonSerializable
 {
     /** @var array */
     protected array $casts = [];
 
     /**
+     * DTO constructor.
+     *
+     * @param array| $fields
+     */
+    public function __construct($fields = [])
+    {
+        $this->fill($fields);
+    }
+
+    /**
      * Заполнить поля DTO из массива и преобразовать в тип поля
      *
-     * @param array|DTO|\Atwinta\DTO\DTO $fields
+     * @param array|DTO| $fields
      * @return $this
-     * @throws DtoException
+
      */
     public function fill($fields): self
     {
-        if ($fields instanceof \Atwinta\DTO\DTO) {
+        if ($fields instanceof DTO) {
             $fields = $fields->toArray();
         }
 
@@ -52,6 +67,33 @@ class DTO extends \Atwinta\DTO\DTO
         return $this;
     }
 
+    public function toArray(): array
+    {
+        $vars = $this->getProperties();
+        $array = [];
+        foreach ($vars as $var) {
+            $key = $var->getName();
+            $value = $this->{$key} ?? null;
+            $array[$key] = ($value && $value instanceof Arrayable ? $value->toArray() : $value);
+        }
+        return $array;
+    }
+
+    /**
+     * Получить все публичные поля объекта
+     *
+     * @return ReflectionProperty[]
+     */
+    protected function getProperties(): array
+    {
+        return $this->reflection()->getProperties(ReflectionProperty::IS_PUBLIC);
+    }
+
+    protected function reflection(): ReflectionClass
+    {
+        return new ReflectionClass(static::class);
+    }
+
     /**
      * @param string $name
      * @param $value
@@ -69,7 +111,7 @@ class DTO extends \Atwinta\DTO\DTO
     }
 
     /**
-     * @param string|\Closure $cast
+     * @param string|Closure $cast
      * @param mixed $value
      * @return mixed
      */
@@ -91,15 +133,6 @@ class DTO extends \Atwinta\DTO\DTO
     }
 
     /**
-     * @param array $keys
-     * @return array
-     */
-    public function only(array $keys): array
-    {
-        return Arr::only($this->initialized(), $keys);
-    }
-
-    /**
      * @param array $values
      * @return Collection
      */
@@ -113,4 +146,58 @@ class DTO extends \Atwinta\DTO\DTO
         return $collection;
     }
 
+    /**
+     * @param array $keys
+     * @return array
+     */
+    public function only(array $keys): array
+    {
+        return Arr::only($this->initialized(), $keys);
+    }
+
+    /**
+     * Рекурсивно трансформирует инициализированные публичные поля DTO в массив
+     *
+     * @return array
+     */
+    public function initialized(): array
+    {
+        $vars = $this->getProperties();
+        $array = [];
+        foreach ($vars as $var) {
+            if ($var->isInitialized($this)) {
+                $key = $var->getName();
+                $value = $this->{$key};
+                $array[$key] = ($value instanceof Arrayable ? $value->toArray() : $value);
+            }
+        }
+        return $array;
+    }
+
+    public function isInitialized(string $field): bool
+    {
+        foreach ($this->getProperties() as $property) {
+            if ($property->getName() === $field) {
+                return $property->isInitialized($this);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param int $options
+     * @return string
+     */
+    public function toJson($options = 0): string
+    {
+        return json_encode(
+            $this->toArray(),
+            $options
+        );
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }
