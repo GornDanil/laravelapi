@@ -2,8 +2,6 @@
 
 namespace App\Domain\DTO;
 
-use Carbon\Carbon;
-
 /**
  * Class Search
  *
@@ -13,7 +11,6 @@ class PasswordResetDTO extends DTO
 {
     /** @var string */
     public string $email;
-
 
 
 }

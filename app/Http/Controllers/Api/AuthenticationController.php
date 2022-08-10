@@ -3,19 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Domain\DTO\LoginDTO;
-use App\Domain\DTO\PasswordResetConfirmDTO;
-use App\Domain\DTO\PasswordResetDTO;
 use App\Domain\DTO\RegistrationDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Authentication\LoginRequest;
-use App\Http\Requests\Api\Authentication\PasswordResetRequest;
 use App\Http\Requests\Api\Authentication\RegisterRequest;
+use App\Models\User;
 use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
-use Atwinta\DTO\Exceptions\DtoException;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticationController extends Controller
 {
@@ -29,25 +23,29 @@ class AuthenticationController extends Controller
     }
 
     /**
-     *
+     * @param LoginRequest $request
+     * @return array<string, User>
      */
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): array
     {
         $data = $request->validated();
+
         $LoginDTO = new loginDTO($data);
+
         return $this->service->login($LoginDTO);
 
     }
 
     /**
      * @param RegisterRequest $request
-     * @return string
-     * @throws DtoException
+     * @return array<string,User>|Response
      */
-    public function registration(RegisterRequest $request)
+    public function registration(RegisterRequest $request): array|Response
     {
         $data = $request->validated();
+
         $registryDTO = new RegistrationDTO($data);
+
         return $this->service->registration($registryDTO);
     }
 

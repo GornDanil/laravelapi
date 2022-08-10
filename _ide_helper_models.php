@@ -113,13 +113,13 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Workers[] $workers
  * @property-read int|null $workers_count
- * @method static \Illuminate\Database\Eloquent\Builder|department newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|department newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|department query()
- * @method static \Illuminate\Database\Eloquent\Builder|department whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|department whereDepartment($value)
- * @method static \Illuminate\Database\Eloquent\Builder|department whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|department whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Department newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Department newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Department query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Department whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Department whereDepartment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Department whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Department whereUpdatedAt($value)
  */
 	class IdeHelperdepartment {}
 }

@@ -18,7 +18,7 @@ class WorkersRepository extends BaseRepository implements WorkersRepositoryInter
      *
      * @return string
      */
-    public function model()
+    public function model(): string
     {
         return Workers::class;
     }

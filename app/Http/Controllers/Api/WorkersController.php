@@ -7,6 +7,7 @@ use App\Http\Requests\Api\UpdateUserRequest;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Prettus\Repository\Exceptions\RepositoryException;
+use Symfony\Component\HttpFoundation\Response;
 
 class WorkersController extends Controller
 {
@@ -28,6 +29,11 @@ class WorkersController extends Controller
         $user = Auth::user();
         return $this->service->workers($user);
     }
+
+    /**
+     * @param int $user
+     * @return object
+     */
     public function userWorker(int $user): object
     {
         return $this->service->showUserWorker($user);
@@ -41,11 +47,19 @@ class WorkersController extends Controller
         $user = Auth::user();
         return $this->service->showUserWorker($user->id);
     }
-    public function updateUser(UpdateUserRequest $request) {
-        $data = $request->validated();
-        $updateUserDTO = new UpdateUserDTO($data);
-        $user = Auth::user();
-        return $this->service->updateUser($user, $updateUserDTO);
 
+    /**
+     * @param UpdateUserRequest $request
+     * @return Response
+     */
+    public function updateUser(UpdateUserRequest $request): Response
+    {
+        $data = $request->validated();
+
+        $updateUserDTO = new UpdateUserDTO($data);
+
+        $user = Auth::user();
+
+        return $this->service->updateUser($user, $updateUserDTO);
     }
 }

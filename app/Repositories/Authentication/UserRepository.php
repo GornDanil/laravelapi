@@ -4,8 +4,8 @@ namespace App\Repositories\Authentication;
 
 use App\Models\User;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Prettus\Repository\Eloquent\BaseRepository;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class UserRepositoryInterfaceEloquent.
@@ -27,11 +27,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function userWorker($user): ?Collection
+    public function userWorker($user): LengthAwarePaginator
     {
         $query = $this->makeModel();
-            return $query->select('id', 'login', 'name', 'email', 'about'
-            )->where('departments_id', $user->departments_id)->get();
+        return $query->select('id', 'login', 'name', 'email', 'about'
+        )->where('departments_id', $user->departments_id)->paginate(10);
 
     }
 }

@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * App\Models\Department
  * @mixin IdeHelperdepartment
  */
-class department extends Model
+class Department extends Model
 {
     use HasFactory;
 

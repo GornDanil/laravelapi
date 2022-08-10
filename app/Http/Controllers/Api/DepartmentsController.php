@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Authentication\LoginRequest;
 use App\Services\Departments\Abstracts\DepartmentsServiceInterface;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class DepartmentsController extends Controller
@@ -19,10 +18,12 @@ class DepartmentsController extends Controller
         $this->service = $service;
     }
 
-    public function departments()
+    /**
+     * @return ?Collection
+     */
+    public function departments(): ?Collection
     {
         $user = Auth::user();
-        $data = $this->service->DepartmentsAndWorkers($user);
-        return $data;
+        return $this->service->DepartmentsAndWorkers($user);
     }
 }

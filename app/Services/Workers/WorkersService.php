@@ -2,30 +2,21 @@
 
 namespace App\Services\Workers;
 
-use App\Models\User;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
-use App\Repositories\Workers\Abstracts\WorkersRepositoryInterface;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
-use http\Env\Response;
-use Prettus\Repository\Exceptions\RepositoryException;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Symfony\Component\HttpFoundation\Response;
 
 class WorkersService implements WorkersServiceInterface
 {
-    /** @var WorkersRepositoryInterface */
-    private WorkersRepositoryInterface $repository;
 
 
+    /** @var UserRepositoryInterface */
     private UserRepositoryInterface $userRepository;
 
-    /**
-     * @param WorkersRepositoryInterface $repository
-     * @param UserRepositoryInterface $userRepository
-     */
-    public function __construct(
-        WorkersRepositoryInterface $repository,
-        UserRepositoryInterface    $userRepository)
+    /** @param UserRepositoryInterface $userRepository */
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        $this->repository = $repository;
         $this->userRepository = $userRepository;
     }
 
@@ -33,12 +24,8 @@ class WorkersService implements WorkersServiceInterface
     /**
      * @inheritDoc
      */
-    public function workers(object $user)
+    public function workers(object $user): LengthAwarePaginator|Response
     {
-        if ($user->role_type == "user") {
-            return response("У вас нет доступа к этой странице");
-        }
-
         if ($user->role_type == "worker") {
             return $this->userRepository->userWorker($user);
         }
@@ -46,6 +33,8 @@ class WorkersService implements WorkersServiceInterface
         if ($user->role_type == "admin") {
             return $this->userRepository->all()->paginate(10);
         }
+
+        return response("У вас нет доступа к этой странице");
     }
 
     /**
@@ -56,12 +45,16 @@ class WorkersService implements WorkersServiceInterface
         return $this->userRepository->findWhere(['id' => $user])->first();
     }
 
-    public function updateUser($user, $updateUserDTO) {
-        $user->update(['about' => $updateUserDTO->about],
+    /**
+     * @inheritDoc
+     */
+    public function updateUser($user, $updateUserDTO): Response
+    {
+        $user->update([['about' => $updateUserDTO->about],
             ['city' => $updateUserDTO->city],
             ['birthday' => $updateUserDTO->birthday],
             ['phone' => $updateUserDTO->phone]
-        );
+        ]);
 
         return response("Профиль обновлен");
     }

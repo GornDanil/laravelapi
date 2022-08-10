@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Authentication\Abstracts;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use Prettus\Repository\Contracts\RepositoryInterface;
 use Prettus\Repository\Exceptions\RepositoryException;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Interface UserRepositoryInterface.
@@ -15,8 +15,8 @@ interface UserRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param $user
-     * @return Collection|null
+     * @return LengthAwarePaginator
      * @throws RepositoryException
      */
-    public function userWorker($user): ?Collection;
+    public function userWorker($user): LengthAwarePaginator;
 }

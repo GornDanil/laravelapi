@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\PasswordResetNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
+ * App\Models\User
  * @mixin IdeHelperUser
+ * @method create(array $toArray)
  */
 class User extends Authenticatable
 {
@@ -58,11 +59,20 @@ class User extends Authenticatable
         'image'
     ];
 
-    public function image()
+
+    /**
+     * @return HasOne
+     */
+    public function image(): HasOne
     {
         return $this->hasOne(Image::class);
     }
-    public function sendPasswordResetNotification($token)
+
+    /**
+     * @param $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token): void
     {
 
         $url = $token;

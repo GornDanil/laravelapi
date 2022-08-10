@@ -2,10 +2,11 @@
 
 namespace App\Services\Departments;
 
-use App\Models\User;
+use App\Models\Department;
 use App\Repositories\Departments\Abstracts\DepartmentRepositoryInterface;
 use App\Services\Departments\Abstracts\DepartmentsServiceInterface;
-use Ramsey\Collection\Collection;
+use Illuminate\Database\Eloquent\Collection;
+use Symfony\Component\HttpFoundation\Response;
 
 class DepartmentsService implements DepartmentsServiceInterface
 {
@@ -19,20 +20,22 @@ class DepartmentsService implements DepartmentsServiceInterface
     }
 
     /** @inheritDoc */
-    public function DepartmentsAndWorkers(User $user)
+    public function DepartmentsAndWorkers(object $user): Department|Response
     {
         if ($user->role_type == "user") {
             return $this->repository->all();
         }
 
         if ($user->role_type == "worker") {
-            return $this->repository->with('workers.workerAtDepartment')->find($user->departments_id);
+            dd($this->repository->with('workers.workerAtDepartment')->find($user->departments_id));
+            // return ;
+
         }
 
         if ($user->role_type == "admin") {
             return $this->repository->with('workers.workerAtDepartment')->all();
         }
-
+        return response("У вас нет прав для просмотра этой страницы");
     }
 
 
