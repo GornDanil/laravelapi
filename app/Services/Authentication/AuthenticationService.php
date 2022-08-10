@@ -3,6 +3,7 @@
 namespace App\Services\Authentication;
 
 use App\Domain\DTO\LoginDTO;
+use App\Domain\DTO\PasswordResetConfirmDTO;
 use App\Domain\DTO\RegistrationDTO;
 use App\Models\Image;
 use App\Models\User;
@@ -59,5 +60,6 @@ class AuthenticationService implements AuthenticationServiceInterface
             $user
             ];
     }
+
 
 }

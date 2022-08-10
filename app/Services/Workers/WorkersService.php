@@ -7,6 +7,7 @@ use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use App\Repositories\Workers\Abstracts\WorkersRepositoryInterface;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
 use http\Env\Response;
+use Prettus\Repository\Exceptions\RepositoryException;
 
 class WorkersService implements WorkersServiceInterface
 {
@@ -29,6 +30,9 @@ class WorkersService implements WorkersServiceInterface
     }
 
 
+    /**
+     * @inheritDoc
+     */
     public function workers(object $user)
     {
         if ($user->role_type == "user") {
@@ -40,7 +44,25 @@ class WorkersService implements WorkersServiceInterface
         }
 
         if ($user->role_type == "admin") {
-            return $this->userRepository->all();
+            return $this->userRepository->all()->paginate(10);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function showUserWorker($user): ?object
+    {
+        return $this->userRepository->findWhere(['id' => $user])->first();
+    }
+
+    public function updateUser($user, $updateUserDTO) {
+        $user->update(['about' => $updateUserDTO->about],
+            ['city' => $updateUserDTO->city],
+            ['birthday' => $updateUserDTO->birthday],
+            ['phone' => $updateUserDTO->phone]
+        );
+
+        return response("Профиль обновлен");
     }
 }

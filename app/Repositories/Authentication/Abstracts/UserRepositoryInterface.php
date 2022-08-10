@@ -3,6 +3,8 @@
 namespace App\Repositories\Authentication\Abstracts;
 
 use Prettus\Repository\Contracts\RepositoryInterface;
+use Prettus\Repository\Exceptions\RepositoryException;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Interface UserRepositoryInterface.
@@ -11,5 +13,10 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface UserRepositoryInterface extends RepositoryInterface
 {
-    public function userWorker($user);
+    /**
+     * @param $user
+     * @return Collection|null
+     * @throws RepositoryException
+     */
+    public function userWorker($user): ?Collection;
 }

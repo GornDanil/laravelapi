@@ -3,13 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Domain\DTO\LoginDTO;
+use App\Domain\DTO\PasswordResetConfirmDTO;
+use App\Domain\DTO\PasswordResetDTO;
 use App\Domain\DTO\RegistrationDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Authentication\LoginRequest;
+use App\Http\Requests\Api\Authentication\PasswordResetRequest;
 use App\Http\Requests\Api\Authentication\RegisterRequest;
 use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
 use Atwinta\DTO\Exceptions\DtoException;
-use Mockery\Exception;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class AuthenticationController extends Controller
 {
@@ -44,5 +50,6 @@ class AuthenticationController extends Controller
         $registryDTO = new RegistrationDTO($data);
         return $this->service->registration($registryDTO);
     }
+
 
 }

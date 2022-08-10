@@ -5,6 +5,7 @@ namespace App\Repositories\Authentication;
 use App\Models\User;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use Prettus\Repository\Eloquent\BaseRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class UserRepositoryInterfaceEloquent.
@@ -18,17 +19,19 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      *
      * @return string
      */
-    public function model()
+    public function model(): string
     {
         return User::class;
     }
 
-    public function userWorker($user)
+    /**
+     * @inheritDoc
+     */
+    public function userWorker($user): ?Collection
     {
         $query = $this->makeModel();
-        if ($user->role_type == 'worker') {
             return $query->select('id', 'login', 'name', 'email', 'about'
             )->where('departments_id', $user->departments_id)->get();
-        }
+
     }
 }
