@@ -7,12 +7,13 @@ namespace App\Domain\DTO;
  *
  * @package App\Domain\DTO
  */
-class LoginDTO extends DTO
+class PasswordResetConfirmDTO extends DTO
 {
-    /** @var string */
     public string $email;
 
+    public string $token;
     /** @var string */
     public string $password;
+
 
 }

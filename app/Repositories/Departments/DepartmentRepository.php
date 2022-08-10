@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Departments;
 
-use Prettus\Repository\Eloquent\BaseRepository;
+use App\Models\Department;
 use App\Repositories\Departments\Abstracts\DepartmentRepositoryInterface;
-use App\Models\department;
+use Prettus\Repository\Eloquent\BaseRepository;
 
 /**
  * Class DepartmentRepository.
@@ -18,7 +18,7 @@ class DepartmentRepository extends BaseRepository implements DepartmentRepositor
      *
      * @return string
      */
-    public function model()
+    public function model(): string
     {
         return Department::class;
     }

@@ -5,7 +5,6 @@ namespace App\Repositories\Workers;
 use App\Models\Workers;
 use App\Repositories\Workers\Abstracts\WorkersRepositoryInterface;
 use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Exceptions\RepositoryException;
 
 /**
  * Class WorkersRepository.
@@ -19,12 +18,10 @@ class WorkersRepository extends BaseRepository implements WorkersRepositoryInter
      *
      * @return string
      */
-    public function model()
+    public function model(): string
     {
         return Workers::class;
     }
-
-
 
 
 }

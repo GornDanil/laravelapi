@@ -3,11 +3,11 @@
 use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\Api\DepartmentsController;
 use App\Http\Controllers\Api\WorkersController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
-|--------------------------------------------------------------------------
+|------dleware' = > 'throttle:3'--------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
 |
@@ -16,11 +16,28 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('registration', [AuthenticationController::class, 'registration']);
+Route::prefix('auth')->middleware('throttle:20,60')->group(function () {
+    Route::post('/registration', [AuthenticationController::class, 'registration'])->name('registration');
 
-Route::post('login', [AuthenticationController::class, 'login']);
-Route::middleware('auth:sanctum')->get('user', function (Request $request) {
-    return auth()->user();
+    Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
+
+    Route::post('/forgot-password', [ResetPasswordController::class, 'forgotPassword'])->name('forgot-password');
+
+    Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('reset-password');
 });
-Route::middleware('auth:sanctum')->get('departments', [DepartmentsController::class, 'departments']);
-Route::middleware('auth:sanctum')->get('workers', [WorkersController::class, 'workersList']);
+
+
+Route::middleware('auth:sanctum')->group(function() {
+    Route::get('departments', [DepartmentsController::class, 'departments']);
+
+    Route::get('workers', [WorkersController::class, 'workersList']);
+
+    Route::get('workers/{user}', [WorkersController::class, 'userWorker']);
+
+    Route::get('user', [WorkersController::class, 'user']);
+
+    Route::post('user', [WorkersController::class, 'updateUser']);
+});
+
+
+

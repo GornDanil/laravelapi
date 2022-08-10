@@ -3,7 +3,7 @@
 namespace App\Domain\DTO;
 
 /**
- * Class RegistrDTO
+ * Class RegistrationDTO
  *
  * @package App\Domain\DTO
  */
