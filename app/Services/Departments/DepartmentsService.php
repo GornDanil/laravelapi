@@ -5,6 +5,7 @@ namespace App\Services\Departments;
 use App\Models\Department;
 use App\Repositories\Departments\Abstracts\DepartmentRepositoryInterface;
 use App\Services\Departments\Abstracts\DepartmentsServiceInterface;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,7 +20,9 @@ class DepartmentsService implements DepartmentsServiceInterface
         $this->repository = $repository;
     }
 
-    /** @inheritDoc */
+    /** @inheritDoc
+     * @throws Exception
+     */
     public function DepartmentsAndWorkers(object $user): Collection|Department|Response
     {
         if ($user->role_type == "user") {
@@ -34,7 +37,7 @@ class DepartmentsService implements DepartmentsServiceInterface
             return $this->repository->with('workers.workerAtDepartment')->all();
         }
 
-        return response("У вас нет прав для просмотра этой страницы");
+        throw new Exception("У вас нет прав для просмотра данной страницы");
     }
 
 

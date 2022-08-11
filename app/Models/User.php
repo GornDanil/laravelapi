@@ -47,7 +47,8 @@ class User extends \TCG\Voyager\Models\User
         'created_at',
         'updated_at',
         'departments_id',
-        'workers_id'
+        'workers_id',
+        'role_id'
     ];
 
     /**
@@ -66,7 +67,7 @@ class User extends \TCG\Voyager\Models\User
     /** @return HasOne */
     public function image(): HasOne
     {
-        return $this->hasOne(Image::class);
+        return $this->hasOne(Images::class);
     }
 
     /** @return BelongsTo */

@@ -9,6 +9,7 @@ use App\Http\Requests\Api\Authentication\LoginRequest;
 use App\Http\Requests\Api\Authentication\RegisterRequest;
 use App\Models\User;
 use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticationController extends Controller
@@ -32,8 +33,14 @@ class AuthenticationController extends Controller
 
         $LoginDTO = new loginDTO($data);
 
-        return $this->service->login($LoginDTO);
+        $user = $this->service->login($LoginDTO);
 
+        Auth::login($user);
+
+        return [
+            $user->createToken('token')->plainTextToken,
+            $user
+        ];
     }
 
     /**

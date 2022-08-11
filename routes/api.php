@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
-|------dleware' = > 'throttle:3'--------------------------------------------------------------------
+|------middleware' = > 'throttle:3'--------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
 |
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::prefix('auth')->middleware('throttle:20,60')->group(function () {
+Route::prefix('auth')/*->middleware('throttle:20,1')*/->group(function () {
     Route::post('/registration', [AuthenticationController::class, 'registration'])->name('registration');
 
     Route::post('/login', [AuthenticationController::class, 'login'])->name('login');

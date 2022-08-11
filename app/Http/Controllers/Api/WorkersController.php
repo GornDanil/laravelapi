@@ -45,8 +45,7 @@ class WorkersController extends Controller
      */
     public function user(): object
     {
-        $user = Auth::user();
-        return $this->service->showUserWorker($user->id);
+        return $this->service->showUserWorker(Auth::user()->id);
     }
 
     /**
