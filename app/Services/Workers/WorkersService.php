@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Services\Workers;
-
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -24,14 +23,14 @@ class WorkersService implements WorkersServiceInterface
     /**
      * @inheritDoc
      */
-    public function workers(object $user): LengthAwarePaginator|Response
+    public function workers(object $user): array|LengthAwarePaginator|Response
     {
         if ($user->role_type == "worker") {
             return $this->userRepository->userWorker($user);
         }
 
         if ($user->role_type == "admin") {
-            return $this->userRepository->all()->paginate(10);
+            return $this->userRepository->with(['workPosition', 'departmentName'])->paginate(10)->all();
         }
 
         return response("У вас нет доступа к этой странице");
@@ -40,9 +39,9 @@ class WorkersService implements WorkersServiceInterface
     /**
      * @inheritDoc
      */
-    public function showUserWorker($user): ?object
+    public function showUserWorker(int $user): ?object
     {
-        return $this->userRepository->findWhere(['id' => $user])->first();
+        return $this->userRepository->with(['workPosition', 'departmentName'])->findWhere(['id' => $user])->first();
     }
 
     /**
@@ -50,10 +49,10 @@ class WorkersService implements WorkersServiceInterface
      */
     public function updateUser($user, $updateUserDTO): Response
     {
-        $user->update([['about' => $updateUserDTO->about],
-            ['city' => $updateUserDTO->city],
-            ['birthday' => $updateUserDTO->birthday],
-            ['phone' => $updateUserDTO->phone]
+        $user->update(['about' => $updateUserDTO->about,
+            'city' => $updateUserDTO->city,
+            'birthday' => $updateUserDTO->birthday,
+            'phone' => $updateUserDTO->phone
         ]);
 
         return response("Профиль обновлен");

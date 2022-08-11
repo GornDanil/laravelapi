@@ -18,7 +18,8 @@
         "prettus/l5-repository": "^2.8",
         "spiral/roadrunner": "^2.8.2",
         "symfony/http-client": "^6.1",
-        "symfony/mailgun-mailer": "^6.1"
+        "symfony/mailgun-mailer": "^6.1",
+        "tcg/voyager": "^1.5"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",

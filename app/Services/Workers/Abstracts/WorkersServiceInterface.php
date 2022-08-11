@@ -13,9 +13,9 @@ interface WorkersServiceInterface
     /**
      * @param object $user
      * @throws RepositoryException
-     * @return LengthAwarePaginator|Response
+     * @return array<User>|LengthAwarePaginator|Response
      */
-    public function workers(object $user): LengthAwarePaginator|Response;
+    public function workers(object $user): array|LengthAwarePaginator|Response;
 
     /**
      * @param int $user

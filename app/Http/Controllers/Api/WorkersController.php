@@ -5,6 +5,7 @@ use App\Domain\DTO\UpdateUserDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\UpdateUserRequest;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,10 +22,10 @@ class WorkersController extends Controller
     }
 
     /**
-     * @return object
+     * @return array|LengthAwarePaginator|Response
      * @throws RepositoryException
      */
-    public function workersList(): object
+    public function workersList(): array|LengthAwarePaginator|Response
     {
         $user = Auth::user();
         return $this->service->workers($user);
@@ -32,9 +33,9 @@ class WorkersController extends Controller
 
     /**
      * @param int $user
-     * @return object
+     * @return object|Response
      */
-    public function userWorker(int $user): object
+    public function userWorker(int $user): ?object
     {
         return $this->service->showUserWorker($user);
     }
@@ -44,8 +45,7 @@ class WorkersController extends Controller
      */
     public function user(): object
     {
-        $user = Auth::user();
-        return $this->service->showUserWorker($user->id);
+        return $this->service->showUserWorker(Auth::user()->id);
     }
 
     /**

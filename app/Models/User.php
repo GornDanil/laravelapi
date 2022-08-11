@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Notifications\PasswordResetNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,7 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @mixin IdeHelperUser
  * @method create(array $toArray)
  */
-class User extends Authenticatable
+class User extends \TCG\Voyager\Models\User
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -44,7 +45,10 @@ class User extends Authenticatable
         'remember_token',
         'email_verified_at',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'departments_id',
+        'workers_id',
+        'role_id'
     ];
 
     /**
@@ -56,16 +60,26 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     protected $with = [
-        'image'
+        'image',
     ];
 
 
-    /**
-     * @return HasOne
-     */
+    /** @return HasOne */
     public function image(): HasOne
     {
-        return $this->hasOne(Image::class);
+        return $this->hasOne(Images::class);
+    }
+
+    /** @return BelongsTo */
+    public function departmentName(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'departments_id');
+    }
+
+    /** @return BelongsTo */
+    public function workPosition(): BelongsTo
+    {
+        return $this->belongsTo(Workers::class, 'workers_id');
     }
 
     /**
