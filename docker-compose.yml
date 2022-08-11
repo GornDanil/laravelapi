@@ -12,7 +12,7 @@ services:
             - code:/app
         networks:
             - main
-        command: php artisan octane:start --host 0.0.0.0
+        command: php artisan octane:start --host 0.0.0.0 --workers 1 --max-requests 1
         labels:
             - traefik.enable=true
 

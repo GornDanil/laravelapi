@@ -11,7 +11,7 @@ interface DepartmentsServiceInterface
 {
     /**
      * @param object $user
-     * @return Department|Response
+     * @return Collection|Department|Response
      */
-    public function DepartmentsAndWorkers(object $user): Department|Response;
+    public function DepartmentsAndWorkers(object $user): Collection|Department|Response;
 }

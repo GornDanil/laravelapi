@@ -21,9 +21,9 @@ Route::prefix('auth')->middleware('throttle:20,60')->group(function () {
 
     Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
 
-    Route::post('/forgot-password', [ResetPasswordController::class, 'forgotPassword'])->name('forgot-password');
+    Route::post('/restore', [ResetPasswordController::class, 'forgotPassword'])->name('restore');
 
-    Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('reset-password');
+    Route::post('restore/confirm', [ResetPasswordController::class, 'reset'])->name('confirm');
 });
 
 

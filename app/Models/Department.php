@@ -15,9 +15,11 @@ class Department extends Model
     use HasFactory;
 
 
-    protected $with = [
-        'workers'
+    protected $hidden = [
+        'created_at',
+        'updated_at'
     ];
+
 
     public function workers(): HasMany
     {

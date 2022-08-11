@@ -14,6 +14,12 @@ class Workers extends Model
 {
     use HasFactory;
 
+
+    protected $hidden = [
+        'departments_id',
+        'created_at',
+        'updated_at'
+    ];
     /**
      * @return HasMany
      */

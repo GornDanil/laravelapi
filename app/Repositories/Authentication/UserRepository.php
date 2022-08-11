@@ -30,8 +30,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function userWorker($user): LengthAwarePaginator
     {
         $query = $this->makeModel();
-        return $query->select('id', 'login', 'name', 'email', 'about'
-        )->where('departments_id', $user->departments_id)->paginate(10);
+        return $query->select(['id', 'login', 'name', 'email', 'about', 'departments_id','workers_id'
+        ])->with(['workPosition', 'departmentName'])->where('departments_id', $user->departments_id)->paginate(10);
 
     }
 }

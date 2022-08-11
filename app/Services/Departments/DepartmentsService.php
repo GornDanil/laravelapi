@@ -20,21 +20,20 @@ class DepartmentsService implements DepartmentsServiceInterface
     }
 
     /** @inheritDoc */
-    public function DepartmentsAndWorkers(object $user): Department|Response
+    public function DepartmentsAndWorkers(object $user): Collection|Department|Response
     {
         if ($user->role_type == "user") {
             return $this->repository->all();
         }
 
         if ($user->role_type == "worker") {
-            dd($this->repository->with('workers.workerAtDepartment')->find($user->departments_id));
-            // return ;
-
+            return $this->repository->with('workers.workerAtDepartment')->find($user->departments_id) ;
         }
 
         if ($user->role_type == "admin") {
             return $this->repository->with('workers.workerAtDepartment')->all();
         }
+
         return response("У вас нет прав для просмотра этой страницы");
     }
 

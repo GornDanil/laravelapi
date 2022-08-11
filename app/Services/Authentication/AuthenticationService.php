@@ -34,13 +34,17 @@ class AuthenticationService implements AuthenticationServiceInterface
         $dataUser = $this->repository->findWhere(['email' => $data->email]);
         if (count($dataUser) == 0) {
             $data->password = Hash::make($data->password);
+
             $user = new User;
+
            $user->create($data->toArray());
            $image = new Image;
+
            $image->create([
                 'user_id' => $user->id,
                 'filename' => $data->filename
             ]);
+
             return [
                 $user->createToken('token')->plainTextToken,
                 $user

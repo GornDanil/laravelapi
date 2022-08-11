@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
 use App\Services\Departments\Abstracts\DepartmentsServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class DepartmentsController extends Controller
 {
@@ -19,9 +21,9 @@ class DepartmentsController extends Controller
     }
 
     /**
-     * @return ?Collection
+     * @return Collection|Department|Response
      */
-    public function departments(): ?Collection
+    public function departments(): Collection|Department|Response
     {
         $user = Auth::user();
         return $this->service->DepartmentsAndWorkers($user);
