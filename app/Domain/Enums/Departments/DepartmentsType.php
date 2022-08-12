@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Domain\Enums\Pastes;
+namespace App\Domain\Enums\Departments;
 
 
 
@@ -11,7 +11,7 @@ class DepartmentsType
 {
     use Constantable;
 
-    const PUBLIC = "public";
-    const UNLISTED = "unlisted";
-    const PRIVATE = "private";
+    const USER = "user";
+    const WORKER = "worker";
+    const ADMIN = "admin";
 }

@@ -21,11 +21,10 @@ class DepartmentsController extends Controller
     }
 
     /**
-     * @return Collection|Department|Response
+     * @return Collection<Department>|Department|Response
      */
     public function departments(): Collection|Department|Response
     {
-        $user = Auth::user();
-        return $this->service->DepartmentsAndWorkers($user);
+        return $this->service->DepartmentsAndWorkers(Auth::user());
     }
 }

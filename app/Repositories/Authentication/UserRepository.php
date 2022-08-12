@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Authentication;
 
+use App\Domain\DTO\UpdateUserDTO;
 use App\Models\User;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -28,7 +29,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function userWorker($user): LengthAwarePaginator
+    public function userWorker(object $user): LengthAwarePaginator
     {
         $query = $this->makeModel();
         return $query->select(['id', 'login', 'name', 'email', 'about', 'departments_id', 'workers_id'
@@ -36,7 +37,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     }
 
-    /** @inheritDoc */
+    /** @inheritDoc
+     * @throws RepositoryException
+     */
     public function userCard(int $user): User
     {
         $query = $this->makeModel();
@@ -44,13 +47,21 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param $user
-     * @return User
-     * @throws RepositoryException
+     * @inheritDoc
      */
-    public function user($user): User
+    public function user(int $user): User
     {
         $query = $this->makeModel();
         return $query->where('id', $user)->with(['workPosition', 'departmentName'])->first();
+    }
+
+    /** @inheritDoc */
+    public function updateUser(User $user, UpdateUserDTO $updateUserDTO): void
+    {
+        $user->update(['about' => $updateUserDTO->about,
+            'city' => $updateUserDTO->city,
+            'birthday' => $updateUserDTO->birthday,
+            'phone' => $updateUserDTO->phone
+        ]);
     }
 }

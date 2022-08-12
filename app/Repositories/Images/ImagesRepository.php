@@ -2,14 +2,14 @@
 
 namespace App\Repositories\Images;
 
-use App\Models\Images;
+use App\Models\Image;
 use App\Repositories\Images\Abstracts\ImagesRepositoryInterface;
 use Prettus\Repository\Eloquent\BaseRepository;
 
 /**
  * Class ImagesRepository.
  *
- * @package namespace App\Repositories\Images;
+ * @package namespace App\Repositories\Image;
  */
 class ImagesRepository extends BaseRepository implements ImagesRepositoryInterface
 {
@@ -18,8 +18,8 @@ class ImagesRepository extends BaseRepository implements ImagesRepositoryInterfa
      *
      * @return string
      */
-    public function model()
+    public function model(): string
     {
-        return Images::class;
+        return Image::class;
     }
 }

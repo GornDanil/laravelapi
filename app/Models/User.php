@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Notifications\PasswordResetNotification;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -59,6 +60,7 @@ class User extends \TCG\Voyager\Models\User
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    /** @var array<string> */
     protected $with = [
         'image',
     ];
@@ -67,7 +69,7 @@ class User extends \TCG\Voyager\Models\User
     /** @return HasOne */
     public function image(): HasOne
     {
-        return $this->hasOne(Images::class);
+        return $this->hasOne(Image::class);
     }
 
     /** @return BelongsTo */
@@ -79,7 +81,7 @@ class User extends \TCG\Voyager\Models\User
     /** @return BelongsTo */
     public function workPosition(): BelongsTo
     {
-        return $this->belongsTo(Workers::class, 'workers_id');
+        return $this->belongsTo(Worker::class, 'workers_id');
     }
 
     /**

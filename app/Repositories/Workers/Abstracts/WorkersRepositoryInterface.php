@@ -7,9 +7,8 @@ use Prettus\Repository\Contracts\RepositoryInterface;
 /**
  * Interface WorkersRepositoryInterface.
  *
- * @package namespace App\Repositories\Workers;
+ * @package namespace App\Repositories\Worker;
  */
 interface WorkersRepositoryInterface extends RepositoryInterface
 {
-    public function model();
 }

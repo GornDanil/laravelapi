@@ -9,20 +9,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * App\Models\Department
  * @mixin IdeHelperdepartment
+
  */
 class Department extends Model
 {
     use HasFactory;
-
 
     protected $hidden = [
         'created_at',
         'updated_at'
     ];
 
-
+    /**
+     * @return HasMany
+     */
     public function workers(): HasMany
     {
-        return $this->hasMany(Workers::class, 'departments_id');
+        return $this->hasMany(Worker::class, 'departments_id');
     }
 }

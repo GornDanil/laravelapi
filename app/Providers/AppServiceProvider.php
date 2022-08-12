@@ -12,6 +12,9 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * @var array|string[]
+     */
     protected array $mappings = [
         AuthenticationServiceInterface::class => AuthenticationService::class,
         DepartmentsServiceInterface::class => DepartmentsService::class,
@@ -22,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         foreach ($this->mappings as $abstract => $concrete) {
             $this->app->singleton($abstract, $concrete);
@@ -34,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed7e460ca580cfd8da99c862617fe68e",
+    "content-hash": "f2020897aab9ed108c461bf34091c2e9",
     "packages": [
         {
             "name": "arrilot/laravel-widgets",
@@ -71,6 +71,36 @@
                 "source": "https://github.com/arrilot/laravel-widgets/tree/3.13.1"
             },
             "time": "2020-09-20T19:56:38+00:00"
+        },
+        {
+            "name": "atwinta/voyager-schema",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://voyager:eGwrB5F1Yw8UVJsLEhy4@gitlab.atwinta.ru/atwinta/voyager-schema.git",
+                "reference": "134d14bf6a5480a73c1bb232980c0770b3350ad1"
+            },
+            "require": {
+                "ext-json": "*",
+                "laravel/framework": "^7.0|^8.0|^9.0",
+                "php": "^7.2.5|^8.1",
+                "tcg/voyager": "^1.4|^1.5|^1.6"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Atwinta\\Voyager\\": "src"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Nikita",
+                    "email": "evan.gelior@ya.ru"
+                }
+            ],
+            "description": "Voyager migrations",
+            "time": "2022-08-12T04:18:16+00:00"
         },
         {
             "name": "brick/math",
@@ -10160,7 +10190,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "atwinta/voyager-schema": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -9,7 +9,7 @@ use App\Http\Requests\Api\Authentication\LoginRequest;
 use App\Http\Requests\Api\Authentication\RegisterRequest;
 use App\Models\User;
 use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
-use Illuminate\Support\Facades\Auth;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticationController extends Controller
@@ -25,7 +25,8 @@ class AuthenticationController extends Controller
 
     /**
      * @param LoginRequest $request
-     * @return array<string, User>
+     * @return array<int, mixed>
+     * @throws Exception
      */
     public function login(LoginRequest $request): array
     {
@@ -33,27 +34,18 @@ class AuthenticationController extends Controller
 
         $LoginDTO = new loginDTO($data);
 
-        $user = $this->service->login($LoginDTO);
+        return $this->service->login($LoginDTO);
 
-        Auth::login($user);
-
-        return [
-            $user->createToken('token')->plainTextToken,
-            $user
-        ];
     }
 
     /**
      * @param RegisterRequest $request
-     * @return array<string,User>|Response
+     * @return array<int, mixed>
+     * @throws Exception
      */
-    public function registration(RegisterRequest $request): array|Response
+    public function registration(RegisterRequest $request): array
     {
-        $data = $request->validated();
-
-        $registryDTO = new RegistrationDTO($data);
-
-        return $this->service->registration($registryDTO);
+        return $this->service->registration(new RegistrationDTO($request->validated()));
     }
 
 

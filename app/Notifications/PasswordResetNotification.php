@@ -5,7 +5,6 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class PasswordResetNotification extends Notification implements ShouldQueue
@@ -27,35 +26,20 @@ class PasswordResetNotification extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
-     * @return array
+     * @return array<string>
      */
-    public function via(mixed $notifiable): array
+    public function via(): array
     {
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param mixed $notifiable
-     * @return MailMessage
-     */
-    public function toMail(mixed $notifiable): MailMessage
-    {
-        return (new MailMessage)
-            ->line('Forgot Password?')
-            ->action('Click to reset', $this->url)
-            ->line('Thank you for using our application!');
-    }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
-     * @return array
+     * @return array<string>
      */
-    public function toArray(mixed $notifiable): array
+    public function toArray(): array
     {
         return [
             //

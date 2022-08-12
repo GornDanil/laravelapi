@@ -2,14 +2,14 @@
 
 namespace App\Repositories\Workers;
 
-use App\Models\Workers;
+use App\Models\Worker;
 use App\Repositories\Workers\Abstracts\WorkersRepositoryInterface;
 use Prettus\Repository\Eloquent\BaseRepository;
 
 /**
  * Class WorkersRepository.
  *
- * @package namespace App\Repositories\Workers;
+ * @package namespace App\Repositories\Worker;
  */
 class WorkersRepository extends BaseRepository implements WorkersRepositoryInterface
 {
@@ -20,7 +20,7 @@ class WorkersRepository extends BaseRepository implements WorkersRepositoryInter
      */
     public function model(): string
     {
-        return Workers::class;
+        return Worker::class;
     }
 
 

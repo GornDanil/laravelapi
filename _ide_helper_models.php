@@ -12,21 +12,21 @@
 
 namespace App\Models{
 /**
- * App\Models\Images
+ * App\Models\Image
  *
  * @property int $id
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string $filename
- * @method static \Illuminate\Database\Eloquent\Builder|Images newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Images newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Images query()
- * @method static \Illuminate\Database\Eloquent\Builder|Images whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Images whereFilename($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Images whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Images whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Images whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Image newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Image newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Image query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Image whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Image whereFilename($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Image whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Image whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Image whereUserId($value)
  */
 	class IdeHelperImage {}
 }
@@ -51,7 +51,7 @@ namespace App\Models{
  * @property string $role_type
  * @property int|null $departments_id
  * @property int|null $workers_id
- * @property-read \App\Models\Images|null $image
+ * @property-read \App\Models\Image|null $image
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
@@ -82,7 +82,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Workers
+ * App\Models\Worker
  *
  * @property int $id
  * @property int $departments_id
@@ -91,14 +91,14 @@ namespace App\Models{
  * @property string $name
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $workerAtDepartment
  * @property-read int|null $worker_at_department_count
- * @method static \Illuminate\Database\Eloquent\Builder|Workers newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Workers newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Workers query()
- * @method static \Illuminate\Database\Eloquent\Builder|Workers whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Workers whereDepartmentsId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Workers whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Workers whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Workers whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Worker newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Worker newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Worker query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Worker whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Worker whereDepartmentsId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Worker whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Worker whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Worker whereUpdatedAt($value)
  */
 	class IdeHelperWorkers {}
 }
@@ -111,7 +111,7 @@ namespace App\Models{
  * @property string $department
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Workers[] $workers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Worker[] $workers
  * @property-read int|null $workers_count
  * @method static \Illuminate\Database\Eloquent\Builder|Department newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Department newQuery()

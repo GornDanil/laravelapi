@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\Images
+ * App\Models\Image
+ *
  * @mixin IdeHelperImage
- * @method static create(array $array)
  */
-class Images extends Model
+class Image extends Model
 {
     use HasFactory;
 

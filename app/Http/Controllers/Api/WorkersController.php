@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Domain\DTO\UpdateUserDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\UpdateUserRequest;
+use App\Models\User;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -22,13 +23,12 @@ class WorkersController extends Controller
     }
 
     /**
-     * @return array|LengthAwarePaginator|Response
+     * @return array<User>|LengthAwarePaginator|Response
      * @throws RepositoryException
      */
     public function workersList(): array|LengthAwarePaginator|Response
     {
-        $user = Auth::user();
-        return $this->service->workers($user);
+        return $this->service->workers(Auth::user());
     }
 
     /**
@@ -54,12 +54,7 @@ class WorkersController extends Controller
      */
     public function updateUser(UpdateUserRequest $request): Response
     {
-        $data = $request->validated();
-
-        $updateUserDTO = new UpdateUserDTO($data);
-
-        $user = Auth::user();
-
-        return $this->service->updateUser($user, $updateUserDTO);
+        $updateUserDTO = new UpdateUserDTO($request->validated());
+        return $this->service->updateUser(Auth::user(), $updateUserDTO);
     }
 }

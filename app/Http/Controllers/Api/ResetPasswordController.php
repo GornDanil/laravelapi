@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Authentication\PasswordResetRequest;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -18,7 +19,7 @@ class ResetPasswordController extends Controller
 {
     /**
      * @param Request $request
-     * @return array
+     * @return array<string>
      * @throws ValidationException
      */
     public function forgotPassword(Request $request): array
@@ -41,10 +42,10 @@ class ResetPasswordController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param PasswordResetRequest $request
      * @return Application|ResponseFactory|Response
      */
-    public function reset(Request $request): Response|Application|ResponseFactory
+    public function reset(PasswordResetRequest $request): Response|Application|ResponseFactory
     {
         $request->validate([
             'token' => 'required',
@@ -56,7 +57,7 @@ class ResetPasswordController extends Controller
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
                 $user->forceFill([
-                    'password' => Hash::make($request->password),
+                    'password' => Hash::make($request['password']),
                     'remember_token' => Str::random(64),
                 ])->save();
 

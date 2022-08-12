@@ -4,15 +4,11 @@ namespace App\Services\Authentication;
 
 use App\Domain\DTO\LoginDTO;
 use App\Domain\DTO\RegistrationDTO;
-use App\Models\User;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use App\Repositories\Images\Abstracts\ImagesRepositoryInterface;
 use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
-use Eloquent;
 use Exception;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Octane\Exceptions\DdException;
-use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticationService implements AuthenticationServiceInterface
 {
@@ -35,10 +31,8 @@ class AuthenticationService implements AuthenticationServiceInterface
 
     /**
      * @inheritDoc
-     * @mixin Eloquent
-     * @throws Exception
      */
-    public function registration(RegistrationDTO $data): array|Response|Exception
+    public function registration(RegistrationDTO $data): array
     {
 
         if (count($this->repository->findWhere(['email' => $data->email])) == 0) {
@@ -59,10 +53,8 @@ class AuthenticationService implements AuthenticationServiceInterface
 
     /**
      * @inheritDoc
-     * @throws DdException
-     * @throws Exception
      */
-    public function login(LoginDTO $data): User
+    public function login(LoginDTO $data): array
     {
         $dataUser = $this->repository->findWhere(['email' => $data->email]);
 
@@ -74,8 +66,10 @@ class AuthenticationService implements AuthenticationServiceInterface
         if (!Hash::check($data->password, $user->password)) {
             throw new Exception("Неправильный пароль Дружок");
         }
-
-        return $user;
+        return [
+            $user->createToken('token')->plainTextToken,
+            $this->repository->userCard($user->id)
+        ];
     }
 
 

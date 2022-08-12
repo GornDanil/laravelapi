@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Models\Workers
+ * App\Models\Worker
+ *
  * @mixin IdeHelperWorkers
  */
-class Workers extends Model
+class Worker extends Model
 {
     use HasFactory;
 

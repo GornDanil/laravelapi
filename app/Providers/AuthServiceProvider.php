@@ -23,12 +23,12 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->registerPolicies();
 
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
-            $spaUrl = "http://laravel.test?email_verify_url=".$url;
+            $spaUrl = "http://laravel.test?email_verify_url=" . $url;
 
             return (new MailMessage)
                 ->subject('Verify Email Address')

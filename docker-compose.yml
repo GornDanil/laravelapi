@@ -1,24 +1,29 @@
 services:
     backend:
         image: ghcr.io/xwillq/dev-environment/php/8.1-rr:latest
-        container_name: backend
+        container_name: ${APP_NAME}
         restart: on-failure
         logging:
             driver: local
         environment:
-            PHP_IDE_CONFIG: serverName=laravel.test
+            PHP_IDE_CONFIG: serverName=${DOMAIN}
             PHP_MEMORY_LIMIT: 128M
+
+                # Переменные из Octane
+            APP_BASE_PATH: /app
+            APP_ENV: ${APP_ENV}
+            LARAVEL_OCTANE: 1
         volumes:
             - code:/app
         networks:
             - main
-        command: php artisan octane:start --host 0.0.0.0 --workers 1 --max-requests 1
+        command: rr serve -o http.pool.supervisor.max_worker_memory=128
         labels:
             - traefik.enable=true
 
-            - traefik.http.routers.backend.rule=Host(`laravel.test`)
-            - traefik.http.routers.backend.entrypoints=websecure
-            - traefik.http.services.backend.loadbalancer.server.port=8000
+            - traefik.http.routers.${APP_NAME}.rule=Host(`${DOMAIN}`)
+            - traefik.http.routers.${APP_NAME}.entrypoints=websecure
+            - traefik.http.services.${APP_NAME}.loadbalancer.server.port=8000
 networks:
     main:
         external: true
@@ -26,6 +31,7 @@ networks:
 
 volumes:
     code:
+    echo-server:
 
 x-mutagen:
     sync:

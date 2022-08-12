@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Services\Workers;
+
+use App\Domain\Enums\Departments\DepartmentsType;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
+use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,15 +28,15 @@ class WorkersService implements WorkersServiceInterface
      */
     public function workers(object $user): array|LengthAwarePaginator|Response
     {
-        if ($user->role_type == "worker") {
+        if ($user->role_type == DepartmentsType::WORKER) {
             return $this->userRepository->userWorker($user);
         }
 
-        if ($user->role_type == "admin") {
-            return $this->userRepository->with(['workPosition', 'departmentName'])->paginate(10)->all();
+        if ($user->role_type == DepartmentsType::ADMIN) {
+            return $this->userRepository->with(['workPosition', 'departmentName'])->paginate()->get();
         }
 
-        return response("У вас нет доступа к этой странице");
+        throw new Exception("У вас нет доступа к этой странице");
     }
 
     /**
@@ -49,12 +52,8 @@ class WorkersService implements WorkersServiceInterface
      */
     public function updateUser($user, $updateUserDTO): Response
     {
-        $user->update(['about' => $updateUserDTO->about,
-            'city' => $updateUserDTO->city,
-            'birthday' => $updateUserDTO->birthday,
-            'phone' => $updateUserDTO->phone
-        ]);
+        $this->userRepository->updateUser($user, $updateUserDTO);
 
-        return response("Профиль обновлен");
+        return response("Ваш профиль обновлен");
     }
 }
