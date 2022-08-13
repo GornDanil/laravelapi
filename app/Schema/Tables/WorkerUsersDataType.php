@@ -3,6 +3,7 @@
 namespace App\Schema\Tables;
 
 use App\Http\Controllers\Admin\DepartmentsController;
+use App\Models\Department;
 use App\Models\User;
 use App\Models\Worker;
 use Atwinta\Voyager\Domain\Enum\FieldType;
@@ -34,8 +35,8 @@ class WorkerUsersDataType extends BaseDataType
             "slug" => $this->table()->getTable(),
             "roles" => [],
             "model_name" => $this->model(),
-            "display_name_singular" => "Сотрудник",
-            "display_name_plural" => "Сотрудники",
+            "display_name_singular" => "Должность",
+            "display_name_plural" => "Должности",
         ];
     }
 
@@ -51,27 +52,37 @@ class WorkerUsersDataType extends BaseDataType
                 "type" => FieldType::NUMBER,
                 "display_name" => "#"
             ],
-            "departments_id" => [
+            "id" => [
                 "type" => FieldType::NUMBER,
                 "browse" => true,
-                "edit" => false
             ],
             'name' => [
                 "type" => FieldType::TEXT,
-                "browse" => true
+                "display_name" => "Должность",
+                "browse" => true,
+                "edit" => true,
             ],
-            "id_hasmany_users_relationship" => [
-                "type" => FieldType::RELATIONSHIP,
+            "departments_id" => [
+                "type" => FieldType::NUMBER,
                 "browse" => false,
+                "edit" => false
+            ],
+            "departments_id_belongsto_departments_relationship" => [
+                "type" => FieldType::RELATIONSHIP,
+                "display_name" => "Отдел",
+                "browse" => true,
+                "edit" => true,
                 "details" => [
-                    "model" => User::class,
-                    "table" => "users",
-                    "type" => "hasMany",
-                    "column" => "id",
-                    "key" => "workers_id",
-                    "label" => "email"
+                    "model" => Department::class,
+                    "table" => "departments",
+                    "type" => "belongsTo",
+                    "column" => "departments_id",
+                    "key" => "id",
+                    "label" => "department"
                 ]
             ],
+
+
             Model::CREATED_AT => [
                 "display_name" => "Дата создания",
                 "browse" => false,

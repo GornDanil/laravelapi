@@ -83,7 +83,6 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->belongsTo(Worker::class, 'workers_id');
     }
-
     /**
      * @param $token
      * @return void

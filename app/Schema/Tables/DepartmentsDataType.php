@@ -55,6 +55,7 @@ class DepartmentsDataType extends BaseDataType
             ],
             "department" => [
                 "type" => FieldType::TEXT,
+                "display_name" => "Отделы",
                 "browse" => true,
                 "edit" => true
             ],

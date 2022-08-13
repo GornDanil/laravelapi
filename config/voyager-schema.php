@@ -24,7 +24,7 @@ return [
     "menu" => [
         ["class" => \App\Schema\Tables\UserDataType::class],
         ["class" => \App\Schema\Tables\WorkerUsersDataType::class],
-        ['class' => \App\Schema\Tables\DepartmentsDataType::class],
+        ["class" => \App\Schema\Tables\DepartmentsDataType::class],
 
         [
             "custom"     => true,

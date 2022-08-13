@@ -23,6 +23,10 @@ class UserDataType extends BaseDataType
         return User::class;
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('workers_id', '!=', null);
+    }
     /**
      * @inheritdoc
      */
@@ -41,6 +45,7 @@ class UserDataType extends BaseDataType
             "model_name" => $this->model(),
             "display_name_singular" => "Пользователь",
             "display_name_plural" => "Пользователи",
+            "scope" => "active",
         ];
     }
 
@@ -54,34 +59,26 @@ class UserDataType extends BaseDataType
                 "type" => FieldType::NUMBER,
                 "display_name" => "#"
             ],
+            "login" => [
+                "display_name" => "Логин",
+            ],
             "name" => [
                 "display_name" => "Имя",
             ],
             "email" => [
                 "display_name" => "Почта",
             ],
-            "password" => [
-                "type" => FieldType::PASSWORD,
-                "display_name" => "Пароль",
-                "required" => true,
-                "browse" => false,
-                "read" => false,
-                "edit" => true,
-                "add" => true
+            "about" => [
+                "display_name" => "О себе",
             ],
-            "remember_token" => [
-                "display_name" => "Почта",
-                "required" => true,
-                "browse" => false,
-                "read" => false,
-                "edit" => false,
-                "add" => false
+            "birthday" => [
+                "display_name" => "Роль в системе",
             ],
-            "avatar" => [
-                "type" => FieldType::IMAGE,
-                "display_name" => "Аватар",
-                "required" => false,
-                "browse" => false,
+            "phone" => [
+                "display_name" => "Телефон",
+            ],
+            "city" => [
+                "display_name" => "Город",
             ],
             "departments_id" => [
                 "type" => FieldType::NUMBER,
@@ -121,6 +118,33 @@ class UserDataType extends BaseDataType
                     "label" => "name"
                 ]
             ],
+            "role_type" => [
+                "display_name" => "Роль в системе",
+            ],
+            "password" => [
+                "type" => FieldType::PASSWORD,
+                "display_name" => "Пароль",
+                "required" => true,
+                "browse" => false,
+                "read" => false,
+                "edit" => true,
+                "add" => true
+            ],
+            "remember_token" => [
+                "display_name" => "Почта",
+                "required" => true,
+                "browse" => false,
+                "read" => false,
+                "edit" => false,
+                "add" => false
+            ],
+            "avatar" => [
+                "type" => FieldType::IMAGE,
+                "display_name" => "Аватар",
+                "required" => false,
+                "browse" => false,
+            ],
+
             "email_verified_at" => [
                 "type" => FieldType::NUMBER,
                 "display_name" => "Проверка почты",

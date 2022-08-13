@@ -21,6 +21,7 @@ class Worker extends Model
         'created_at',
         'updated_at'
     ];
+
     /**
      * @return HasMany
      */

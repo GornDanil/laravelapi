@@ -40,29 +40,29 @@
 
                         <div class="panel-body">
                             <div class="form-group">
-                                <label for="name">{{ __('voyager::generic.name') }}</label>
+                                <label for="login">Логин</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="{{ __('voyager::generic.name') }}"
+                                       value="{{ old('login', $dataTypeContent->login ?? '') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Имя</label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="{{ __('voyager::generic.name') }}"
                                        value="{{ old('name', $dataTypeContent->name ?? '') }}">
                             </div>
-
                             <div class="form-group">
-                                <label for="email">{{ __('voyager::generic.email') }}</label>
+                                <label for="login">О себе</label>
+                                <textarea  class="form-control" id="name" name="name" placeholder="О себе">{{ old('about', $dataTypeContent->about ?? '') }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Почта</label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="{{ __('voyager::generic.email') }}"
                                        value="{{ old('email', $dataTypeContent->email ?? '') }}">
                             </div>
 
-                            <div class="form-group">
-                                <label for="password">{{ __('voyager::generic.password') }}</label>
-                                @if(isset($dataTypeContent->password))
-                                    <br>
-                                    <small>{{ __('voyager::profile.password_hint') }}</small>
-                                @endif
-                                <input type="password" class="form-control" id="password" name="password" value="" autocomplete="new-password">
-                            </div>
 
                             @can('editRoles', $dataTypeContent)
                                 <div class="form-group">
-                                    <label for="default_role">{{ __('voyager::profile.role_default') }}</label>
+                                    <label for="default_role">Роль в системе</label>
                                     @php
                                         $dataTypeRows = $dataType->{(isset($dataTypeContent->id) ? 'editRows' : 'addRows' )};
 
@@ -72,17 +72,9 @@
                                     @include('voyager::formfields.relationship')
                                 </div>
                                 <div class="form-group">
-                                    <label for="additional_roles">{{ __('voyager::profile.roles_additional') }}</label>
-                                    @php
-                                        $row     = $dataTypeRows->where('field', 'user_belongstomany_role_relationship')->first();
-                                        $options = $row->details;
-                                    @endphp
-                                    @include('voyager::formfields.relationship')
-                                </div>
-                                <div class="form-group">
                                     <label for="additional_workers">Отдел</label>
                                     @php
-                                        $row     = $dataTypeRows->where('field', 'workers_id_belongsto_worker_relationship')->first();
+                                        $row     = $dataTypeRows->where('field', 'departments_id_belongsto_worker_departments_relationship')->first();
                                         $options = $row->details;
                                     @endphp
                                     @include('voyager::formfields.relationship')
