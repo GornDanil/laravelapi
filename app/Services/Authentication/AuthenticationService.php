@@ -48,7 +48,7 @@ class AuthenticationService implements AuthenticationServiceInterface
                 $this->repository->userCard($user->id)
             ];
         }
-        throw new Exception("Пользователь с таким Email уже существует", 419);
+        throw new Exception("Пользователь с таким Email уже существует", 409);
     }
 
     /**
@@ -59,12 +59,12 @@ class AuthenticationService implements AuthenticationServiceInterface
         $dataUser = $this->repository->findWhere(['email' => $data->email]);
 
         if (count($dataUser) == 0) {
-            throw new Exception("Такого пользователя не существует");
+            throw new Exception("Ошибка в заполнении данных", 408);
         }
         $user = $dataUser->first();
 
         if (!Hash::check($data->password, $user->password)) {
-            throw new Exception("Неправильный пароль Дружок");
+            throw new Exception("Ошибка в заполнении данных", 408);
         }
         return [
             $user->createToken('token')->plainTextToken,

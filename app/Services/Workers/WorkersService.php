@@ -36,7 +36,7 @@ class WorkersService implements WorkersServiceInterface
             return $this->userRepository->with(['workPosition', 'departmentName'])->paginate()->get();
         }
 
-        throw new Exception("У вас нет доступа к этой странице");
+        throw new Exception("У вас нет доступа к этой странице", 408);
     }
 
     /**
