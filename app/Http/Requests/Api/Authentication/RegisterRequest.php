@@ -32,7 +32,7 @@ class RegisterRequest extends FormRequest
             'phone' => 'sometimes|nullable|present|string',
             'email' => 'sometimes|nullable|present|email',
             "password" => "required|min:8",
-            "filename" => 'required|string'
+//            "filename" => 'required|image'
         ];
     }
 }

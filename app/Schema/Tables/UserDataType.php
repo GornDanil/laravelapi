@@ -72,7 +72,7 @@ class UserDataType extends BaseDataType
                 "display_name" => "О себе",
             ],
             "birthday" => [
-                "display_name" => "Роль в системе",
+                "display_name" => "Год рождения",
             ],
             "phone" => [
                 "display_name" => "Телефон",

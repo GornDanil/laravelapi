@@ -29,12 +29,12 @@ server:
   # Username (not UID) for the worker processes. An empty value means to use the RR process user.
   #
   # Default: ""
-  user: "www-data"
+#  user: "www-data"
 
   # Group name (not GID) for the worker processes. An empty value means to use the RR process user.
   #
   # Default: ""
-  group: "www-data"
+#  group: "www-data"
 
   # Environment variables for the worker processes.
   #
@@ -127,12 +127,12 @@ http:
     # Deny files with the following extensions to upload.
     #
     # Default: [".php", ".exe", ".bat"]
-    forbid: [ ".php", ".exe", ".bat", ".sh" ]
+#    forbid: [ ".php", ".exe", ".bat", ".sh" ]
 
     # [SINCE 2.6] Allow files with the following extensions to upload
     #
     # Default: empty
-    allow: [ ".html", ".aaa" ]
+#    allow: [ ".html", ".aaa" ]
 
   # Settings for "static" middleware (docs: https://roadrunner.dev/docs/http-static).
   static:

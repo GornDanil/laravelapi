@@ -9,6 +9,7 @@ use App\Repositories\Images\Abstracts\ImagesRepositoryInterface;
 use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
 use Exception;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Client\Request;
 
 class AuthenticationService implements AuthenticationServiceInterface
 {
@@ -34,15 +35,19 @@ class AuthenticationService implements AuthenticationServiceInterface
      */
     public function registration(RegistrationDTO $data): array
     {
-
         if (count($this->repository->findWhere(['email' => $data->email])) == 0) {
             $data->password = Hash::make($data->password);
+
             $user = $this->repository->create($data->toArray());
 
-            $this->imagesRepository->create([
-                'user_id' => $user->id,
-                'filename' => $data->filename
-            ]);
+//            $images = $data->toArray()['filename'];
+//
+//            $images->move(public_path('images'), $images->extension());
+//
+//            $this->imagesRepository->create([
+//                'user_id' => $user->id,
+//                'filename' => $images->extension()
+//            ]);
             return [
                 $user->createToken('token')->plainTextToken,
                 $this->repository->userCard($user->id)

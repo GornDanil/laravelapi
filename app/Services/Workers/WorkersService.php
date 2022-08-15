@@ -33,7 +33,7 @@ class WorkersService implements WorkersServiceInterface
         }
 
         if ($user->role_type == DepartmentsType::ADMIN) {
-            return $this->userRepository->with(['workPosition', 'departmentName'])->paginate()->get();
+            return $this->userRepository->userWorker($user);
         }
 
         throw new Exception("У вас нет доступа к этой странице", 408);
@@ -52,6 +52,10 @@ class WorkersService implements WorkersServiceInterface
      */
     public function updateUser($user, $updateUserDTO): Response
     {
+        $image = $updateUserDTO->toArray()['filename'];
+        if($image != null) {
+            $image->move(public_path('images'), $image->extension());
+        }
         $this->userRepository->updateUser($user, $updateUserDTO);
 
         return response("Ваш профиль обновлен");

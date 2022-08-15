@@ -1,0 +1,482 @@
+---
+openapi: 3.0.1
+info:
+  title: WorkersApi
+  description: Api для компани
+  version: 0.0.1
+servers:
+- url: https://laravel.test
+  description: Workers Api
+tags:
+- name: Авторизация
+  description: Регистрация, авторизация, сброс пароля
+- name: Прочее
+  description: Сотрудники, должности, отделы, пользователи и редактирование информации
+paths:
+  /auth/login:
+    post:
+      tags:
+      - Авторизация
+      summary: Авторизация
+      description: Если почта и пароль совпадают, то выдается токен и информация о пользователе
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Валидация полученных данных
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        "200":
+          description: Пользователь авторизирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Authentication'
+        "408":
+          description: Ошибка в заполнении данных
+        default:
+          description: Any expected error
+  /auth/registration:
+    post:
+      tags:
+      - Авторизация
+      summary: Регистрация пользователя
+      parameters:
+        - name: login
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: about
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: city
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: birthday
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: phone
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Валидация полученных данных
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        "200":
+          description: Пользователь зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Authentication'
+        "408":
+          description: Слишком много пользователей было зарегистрированно за последний час
+        "409":
+          description: Пользователь с такой почтой уже существует
+        default:
+          description: Any expected error
+  /auth/restore:
+    post:
+      tags:
+        - Авторизация
+      summary: Форма для заявки на восстановление пароля
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Запрос был отправлен
+        default:
+          description: Any expected error
+  /auth/restore/confirm:
+    post:
+      tags:
+        - Авторизация
+      summary: Подтверждение восстановления пароля
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: password_confirmation
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Валидация полученных данных
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+      responses:
+        "200":
+          description: Пароль успешно изменен
+        "404":
+          description: Пользователь с таким токеном не найден
+        default:
+          description: Any expected error
+  /departments:
+    get:
+      tags:
+        - Прочее
+      summary: Список всех отделов и должностей
+      description: Доступно только для зарегистрированных пользователей
+      responses:
+        "200":
+          description: Список всех отделов и должностей
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Departments'
+        default:
+          description: Any expected error
+      security:
+        - auth: [ ]
+  /workers:
+    get:
+      tags:
+        - Прочее
+      summary: Просмотр списка сотрудников
+      description: Доступно только для зарегистрированных пользователей
+      responses:
+        "200":
+          description: Пагинированный список сотрудников
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkersPaginate'
+        default:
+          description: Any expected error
+      security:
+        - auth: [ ]
+  /workers/{user}:
+    get:
+      tags:
+        - Прочее
+      summary: Просмотр данных сотрудника
+      description: Доступно только для зарегистрированных пользователей
+      responses:
+        "200":
+          description: Информация о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWorker'
+        default:
+          description: Any expected error
+      security:
+        - auth: []
+  /user:
+    get:
+      tags:
+        - Прочее
+      summary: Просмотр данных пользователя
+      description: Доступно только для зарегистрированных пользователей
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Информация о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: Any expected error
+      security:
+        - auth: [ ]
+    post:
+      tags:
+        - Прочее
+      summary: Изменение данных пользователя
+      description: Доступно только для зарегистрированных пользователей
+      parameters:
+        - name: about
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: city
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: birthday
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: phone
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Валидация полученных данных
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        "200":
+          description: Профиль обновлен
+        default:
+          description: Any expected error
+      security:
+        - auth: [ ]
+components:
+  schemas:
+    LoginRequest:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    PasswordResetRequest:
+      required:
+        - token
+        - password
+        - password_confirmation
+      type: object
+      properties:
+        token:
+          type: string
+        password:
+          type: string
+        password_confirmation:
+          type: string
+    RegisterRequest:
+      type: object
+      properties:
+        login:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        about:
+          type: string
+        city:
+          type: string
+        phone:
+          type: string
+        birthday:
+          type: string
+    UpdateUserRequest:
+      type: object
+      properties:
+        about:
+          type: string
+        city:
+          type: string
+        birthday:
+          type: string
+        phone:
+          type: string
+        filename:
+          type: string
+    Authentication:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+            login:
+              type: string
+            name:
+              type: string
+            email:
+              type: string
+            about:
+              type: string
+            role_type:
+              type: string
+            city:
+              type: string
+            phone:
+              type: string
+            birthday:
+              type: string
+            image:
+              type: string
+    Departments:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        workers:
+          $ref: '#/components/schemas/Workers'
+    LengthAwarePaginator:
+      type: object
+      properties:
+        total:
+          type: string
+          required: true
+        per_page:
+          type: integer
+        current_page:
+          type: integer
+        last_page:
+          type: integer
+        next_page_url:
+          type: string
+        prev_page_url:
+          type: string
+        from:
+          type: integer
+        to:
+          type: integer
+    Workers:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    WorkersUser:
+      type: object
+      properties:
+        id:
+          type: integer
+        login:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        image:
+          type: string
+    WorkersPaginate:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WorkersUser'
+        paginate:
+          $ref: '#/components/schemas/LengthAwarePaginator'
+    UserWorker:
+      type: object
+      properties:
+        id:
+          type: integer
+        login:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        about:
+          type: string
+        role_type:
+          type: string
+        city:
+          type: string
+        phone:
+          type: string
+        birthday:
+          type: string
+        image:
+          type: string
+        work_position:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+        department_name:
+          type: object
+          properties:
+            id:
+              type: integer
+            department:
+              type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        login:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        about:
+          type: string
+        role_type:
+          type: string
+        city:
+          type: string
+        phone:
+          type: string
+        birthday:
+          type: string
+        image:
+          type: string
