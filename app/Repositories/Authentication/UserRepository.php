@@ -62,7 +62,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             'city' => $updateUserDTO->city,
             'birthday' => $updateUserDTO->birthday,
             'phone' => $updateUserDTO->phone,
-            'filename' => $updateUserDTO->toArray()['filename']->extension()
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Repositories\Images;
 
 use App\Models\Image;
+use App\Models\User;
 use App\Repositories\Images\Abstracts\ImagesRepositoryInterface;
 use Prettus\Repository\Eloquent\BaseRepository;
 
@@ -21,5 +22,13 @@ class ImagesRepository extends BaseRepository implements ImagesRepositoryInterfa
     public function model(): string
     {
         return Image::class;
+    }
+    /** @inheritDoc */
+    public function updateImage(mixed $imageName, User $user) {
+        Image::create([
+            'user_id' => $user->id,
+            'filename' => 'app/images/'.$imageName
+        ]);
+
     }
 }

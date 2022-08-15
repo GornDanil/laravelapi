@@ -4,6 +4,7 @@ namespace App\Services\Workers;
 
 use App\Domain\Enums\Departments\DepartmentsType;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
+use App\Repositories\Images\Abstracts\ImagesRepositoryInterface;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
 use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -15,11 +16,13 @@ class WorkersService implements WorkersServiceInterface
 
     /** @var UserRepositoryInterface */
     private UserRepositoryInterface $userRepository;
-
+    private ImagesRepositoryInterface $imagesRepository;
     /** @param UserRepositoryInterface $userRepository */
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository,
+                                ImagesRepositoryInterface $imagesRepository)
     {
         $this->userRepository = $userRepository;
+        $this->imagesRepository = $imagesRepository;
     }
 
 
@@ -53,10 +56,18 @@ class WorkersService implements WorkersServiceInterface
     public function updateUser($user, $updateUserDTO): Response
     {
         $image = $updateUserDTO->toArray()['filename'];
-        if($image != null) {
-            $image->move(public_path('images'), $image->extension());
-        }
+        $imageName = $image->getClientOriginalName();
         $this->userRepository->updateUser($user, $updateUserDTO);
+        if(count($this->imagesRepository->findWhere(['user_id' => $user->id])) != 0) {
+
+            return response("Ваш профиль обновлен. Нет возможности загрузить фотографию");
+        }
+        if($image != null) {
+            $image->move(public_path('images'), $imageName);
+        }
+        $this->imagesRepository->updateImage($imageName, $user);
+
+
 
         return response("Ваш профиль обновлен");
     }
