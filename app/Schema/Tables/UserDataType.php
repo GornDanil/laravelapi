@@ -23,10 +23,6 @@ class UserDataType extends BaseDataType
         return User::class;
     }
 
-    public function scopeActive($query)
-    {
-        return $query->where('workers_id', '!=', null);
-    }
     /**
      * @inheritdoc
      */
@@ -45,7 +41,6 @@ class UserDataType extends BaseDataType
             "model_name" => $this->model(),
             "display_name_singular" => "Пользователь",
             "display_name_plural" => "Пользователи",
-            "scope" => "active",
         ];
     }
 

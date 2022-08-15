@@ -9,7 +9,7 @@ interface DepartmentsServiceInterface
 {
     /**
      * @param object $user
-     * @return Collection<Department>|Department
+     * @return Collection<int,Department>|Department
      */
     public function DepartmentsAndWorkers(object $user): Collection|Department;
 }

@@ -7,10 +7,8 @@ use App\Domain\DTO\RegistrationDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Authentication\LoginRequest;
 use App\Http\Requests\Api\Authentication\RegisterRequest;
-use App\Models\User;
 use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
 use Exception;
-use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticationController extends Controller
 {

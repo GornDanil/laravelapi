@@ -3,6 +3,7 @@
 namespace App\Repositories\Images\Abstracts;
 
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
@@ -14,8 +15,8 @@ interface ImagesRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param mixed $image
-     * @param User $user
-     * @return mixed
+     * @param Authenticatable $user
+     * @return void
      */
-    public function updateImage(mixed $image, User $user);
+    public function updateImage(mixed $image, Authenticatable $user): void;
 }

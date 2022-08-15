@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\AccessException;
 use Exception;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
@@ -19,6 +20,6 @@ class Authenticate extends Middleware
         if (!$request->expectsJson()) {
             return route('login');
         }
-        throw new Exception("Неизвестная ошибка");
+        throw new AccessException();
     }
 }

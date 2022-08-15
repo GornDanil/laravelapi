@@ -56,19 +56,23 @@ class WorkersService implements WorkersServiceInterface
     public function updateUser($user, $updateUserDTO): Response
     {
         $image = $updateUserDTO->toArray()['filename'];
-        $imageName = $image->getClientOriginalName();
+        if($image) {
+            $imageName = $image->getClientOriginalName();
+
+            if(count($this->imagesRepository->findWhere(['user_id' => $user->id])) != 0) {
+
+                return response([ "message" => "Ваш профиль обновлен. Нет возможности загрузить фотографию"]);
+            }
+
+            if($image != null) {
+                $image->move(public_path('images'), $imageName);
+            }
+
+            $this->imagesRepository->updateImage($imageName, $user);
+        }
+
         $this->userRepository->updateUser($user, $updateUserDTO);
-        if(count($this->imagesRepository->findWhere(['user_id' => $user->id])) != 0) {
 
-            return response("Ваш профиль обновлен. Нет возможности загрузить фотографию");
-        }
-        if($image != null) {
-            $image->move(public_path('images'), $imageName);
-        }
-        $this->imagesRepository->updateImage($imageName, $user);
-
-
-
-        return response("Ваш профиль обновлен");
+        return response(["message" => "Ваш профиль обновлен"]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Repositories\Images;
 use App\Models\Image;
 use App\Models\User;
 use App\Repositories\Images\Abstracts\ImagesRepositoryInterface;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Prettus\Repository\Eloquent\BaseRepository;
 
 /**
@@ -24,10 +25,10 @@ class ImagesRepository extends BaseRepository implements ImagesRepositoryInterfa
         return Image::class;
     }
     /** @inheritDoc */
-    public function updateImage(mixed $imageName, User $user) {
+    public function updateImage(mixed $image, Authenticatable $user): void {
         Image::create([
             'user_id' => $user->id,
-            'filename' => 'app/images/'.$imageName
+            'filename' => 'app/images/'.$image
         ]);
 
     }

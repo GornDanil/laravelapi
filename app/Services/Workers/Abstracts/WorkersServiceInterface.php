@@ -5,6 +5,7 @@ namespace App\Services\Workers\Abstracts;
 use App\Domain\DTO\UpdateUserDTO;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,9 +27,9 @@ interface WorkersServiceInterface
     public function showUserWorker(int $user): ?object;
 
     /**
-     * @param User $user
+     * @param ?Authenticatable $user
      * @param UpdateUserDTO $updateUserDTO
      * @return Response
      */
-    public function updateUser(User $user, UpdateUserDTO $updateUserDTO): Response;
+    public function updateUser(?Authenticatable $user, UpdateUserDTO $updateUserDTO): Response;
 }

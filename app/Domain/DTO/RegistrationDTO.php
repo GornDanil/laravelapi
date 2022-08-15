@@ -2,8 +2,6 @@
 
 namespace App\Domain\DTO;
 
-use phpDocumentor\Reflection\File;
-
 /**
  * Class RegistrationDTO
  *
@@ -11,28 +9,27 @@ use phpDocumentor\Reflection\File;
  */
 class RegistrationDTO extends DTO
 {
-    /** @var string  */
+    /** @var string */
     public string $login;
 
-    /** @var string  */
+    /** @var string */
     public string $about;
 
-    /** @var string  */
+    /** @var string */
     public string $birthday;
 
-    /** @var string  */
+    /** @var string */
     public string $city;
 
-    /** @var string  */
+    /** @var string */
     public string $phone;
 
-    /** @var string  */
+    /** @var string */
     public string $name;
 
-    /** @var string  */
+    /** @var string */
     public string $email;
 
-//    public  mixed $filename;
-    /** @var string  */
+    /** @var string */
     public string $password;
 }

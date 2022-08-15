@@ -15,6 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
  * App\Models\User
  * @mixin IdeHelperUser
  * @method create(array $toArray)
+ * @property int $id
  */
 class User extends \TCG\Voyager\Models\User
 {

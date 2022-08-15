@@ -3,6 +3,7 @@
 namespace App\Services\Departments;
 
 use App\Domain\Enums\Departments\DepartmentsType;
+use App\Exceptions\AccessException;
 use App\Models\Department;
 use App\Repositories\Departments\Abstracts\DepartmentRepositoryInterface;
 use App\Services\Departments\Abstracts\DepartmentsServiceInterface;
@@ -37,7 +38,7 @@ class DepartmentsService implements DepartmentsServiceInterface
             return $this->repository->with('workers.workerAtDepartment')->all();
         }
 
-        throw new Exception("У вас нет прав для просмотра данной страницы");
+        throw new AccessException();
     }
 
 
