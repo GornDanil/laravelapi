@@ -13,10 +13,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface ImagesRepositoryInterface extends RepositoryInterface
 {
-    /**
-     * @param mixed $image
-     * @param Authenticatable $user
-     * @return void
-     */
-    public function updateImage(mixed $image, Authenticatable $user): void;
+
 }

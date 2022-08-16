@@ -8,7 +8,6 @@ use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Exceptions\RepositoryException;
 
 /**
  * Class UserRepositoryInterfaceEloquent.
@@ -61,6 +60,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function user(int $user): User
     {
+        /** @var Builder $query */
         $query = $this->makeModel();
         return $query->where('id', $user)->with(['workPosition', 'departmentName'])->first();
     }

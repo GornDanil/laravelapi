@@ -14,8 +14,6 @@ use Laravel\Sanctum\HasApiTokens;
 /**
  * App\Models\User
  * @mixin IdeHelperUser
- * @method create(array $toArray)
- * @property int $id
  */
 class User extends \TCG\Voyager\Models\User
 {
@@ -35,6 +33,7 @@ class User extends \TCG\Voyager\Models\User
         'city',
         'phone',
         'password',
+        'image_id'
     ];
 
     /**
@@ -50,7 +49,8 @@ class User extends \TCG\Voyager\Models\User
         'updated_at',
         'departments_id',
         'workers_id',
-        'role_id'
+        'role_id',
+
     ];
 
     /**
@@ -67,18 +67,17 @@ class User extends \TCG\Voyager\Models\User
     ];
 
 
-    /** @return HasOne */
-    public function image(): HasOne
-    {
-        return $this->hasOne(Image::class);
-    }
 
     /** @return BelongsTo */
     public function departmentName(): BelongsTo
     {
         return $this->belongsTo(Department::class, 'departments_id');
     }
-
+    /** @return BelongsTo */
+    public function image(): BelongsTo
+    {
+        return $this->belongsTo(image::class, 'image_id');
+    }
     /** @return BelongsTo */
     public function workPosition(): BelongsTo
     {

@@ -7,6 +7,7 @@ use App\Domain\DTO\RegistrationDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Authentication\LoginRequest;
 use App\Http\Requests\Api\Authentication\RegisterRequest;
+use App\Http\Resources\UserResource;
 use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
 use Exception;
 
@@ -23,10 +24,10 @@ class AuthenticationController extends Controller
 
     /**
      * @param LoginRequest $request
-     * @return array<int, mixed>
+     * @return UserResource<array>
      * @throws Exception
      */
-    public function login(LoginRequest $request): array
+    public function login(LoginRequest $request): UserResource
     {
         $data = $request->validated();
 
@@ -38,13 +39,11 @@ class AuthenticationController extends Controller
 
     /**
      * @param RegisterRequest $request
-     * @return array<int, mixed>
+     * @return UserResource<array>
      * @throws Exception
      */
-    public function registration(RegisterRequest $request): array
+    public function registration(RegisterRequest $request): UserResource
     {
         return $this->service->registration(new RegistrationDTO($request->validated()));
     }
-
-
 }

@@ -21,6 +21,6 @@ class UpdateUserDTO extends DTO
     /** @var string  */
     public string $phone;
 
-    public ?string $filename;
+
 
 }

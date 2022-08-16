@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('user', [WorkersController::class, 'user']);
 
     Route::post('user', [WorkersController::class, 'updateUser']);
+    Route::post('user/updateImages', [WorkersController::class, 'updateImages']);
 });
 
 

@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Worker
- *
  * @mixin IdeHelperWorkers
  */
 class Worker extends Model
