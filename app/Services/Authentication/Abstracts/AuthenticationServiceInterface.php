@@ -6,23 +6,24 @@ use App\Domain\DTO\LoginDTO;
 use App\Domain\DTO\PasswordResetConfirmDTO;
 use App\Domain\DTO\RegistrationDTO;
 use App\Http\Resources\UserResource;
+use App\Models\User;
 use Exception;
 
 interface AuthenticationServiceInterface
 {
     /**
      * @param RegistrationDTO $data
-     * @return UserResource<array>
+     * @return User
      * @throws Exception
      */
-    public function registration(RegistrationDTO $data): UserResource;
+    public function registration(RegistrationDTO $data): User;
 
     /**
      * @param LoginDTO $data
-     * @return UserResource<array>
+     * @return User
      * @throws Exception
      */
-    public function login(LoginDTO $data): UserResource;
+    public function login(LoginDTO $data): User;
 
     /**
      * @param PasswordResetConfirmDTO $passwordResetDTO

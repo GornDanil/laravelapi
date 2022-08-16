@@ -7,7 +7,7 @@ services:
             driver: local
         environment:
             PHP_IDE_CONFIG: serverName=${DOMAIN}
-            PHP_MEMORY_LIMIT: 128M
+            PHP_MEMORY_LIMIT: 2048M
 
                 # Переменные из Octane
             APP_BASE_PATH: /app

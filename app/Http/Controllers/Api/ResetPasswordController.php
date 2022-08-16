@@ -6,7 +6,7 @@ use App\Domain\DTO\PasswordResetConfirmDTO;
 use App\Domain\DTO\PasswordResetDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Authentication\PasswordResetRequest;
-use App\Http\Requests\EmailRequest;
+use App\Http\Requests\Api\Authentication\EmailRequest;
 use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Foundation\Application;
@@ -38,12 +38,11 @@ class ResetPasswordController extends Controller
     {
         $passwordResetDTO = new PasswordResetDTO($request->validated());
 
-        $passwordResetDTO = $passwordResetDTO->toArray();
+        $emailDTO = $passwordResetDTO->toArray();
 
         $status = Password::sendResetLink(
-            $passwordResetDTO['email']
+            ['email' => $emailDTO['email']]
         );
-
         if ($status == Password::RESET_LINK_SENT) {
             return [
                 'status' => __($status)

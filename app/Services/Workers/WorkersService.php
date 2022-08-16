@@ -20,7 +20,10 @@ class WorkersService implements WorkersServiceInterface
     private UserRepositoryInterface $userRepository;
     private ImagesRepositoryInterface $imagesRepository;
 
-    /** @param UserRepositoryInterface $userRepository */
+    /**
+     * @param UserRepositoryInterface $userRepository
+     * @param ImagesRepositoryInterface $imagesRepository
+     */
     public function __construct(UserRepositoryInterface   $userRepository,
                                 ImagesRepositoryInterface $imagesRepository)
     {
@@ -32,13 +35,9 @@ class WorkersService implements WorkersServiceInterface
     /**
      * @inheritDoc
      */
-    public function workers(User $user): LengthAwarePaginator
+    public function workers(?User $user): LengthAwarePaginator
     {
-        if ($user->role_type == DepartmentsType::WORKER) {
-            return $this->userRepository->userWorker($user);
-        }
-
-        if ($user->role_type == DepartmentsType::ADMIN) {
+        if (in_array($user->role_type, [DepartmentsType::WORKER, DepartmentsType::ADMIN])) {
             return $this->userRepository->userWorker($user);
         }
 
@@ -61,12 +60,11 @@ class WorkersService implements WorkersServiceInterface
         $this->userRepository->updateUser($user, $updateUserDTO);
     }
 
-
+    /** @inheritDoc */
     public function updateImages(User $user, ImageUploadDTO $imageDTO): void
     {
         if (isset($imageDTO->filename)) {
             $image = $imageDTO->filename;
-
             $imageName = $user->id . $image->getClientOriginalName();
 
             $imageUser = $this->imagesRepository->create([

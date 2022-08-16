@@ -26,18 +26,20 @@ class WorkersController extends Controller
     }
 
     /**
-     * @return array<User>|LengthAwarePaginator|Response
+     * @return array<User>|LengthAwarePaginator
      * @throws RepositoryException
      */
-    public function workersList(): array|LengthAwarePaginator|Response
+    public function workersList(): array|LengthAwarePaginator
     {
-        return $this->service->workers(Auth::user());
+        /** @var ?User $user */
+        $user = Auth::user();
+        return $this->service->workers($user);
     }
 
     /**
      * @return User
      */
-    public function user(): object
+    public function user(): User
     {
         /** @var User|null $user */
         $user = Auth::user();
@@ -73,7 +75,7 @@ class WorkersController extends Controller
     public function updateImages(ImageUploadRequest $request): \Illuminate\Http\Response
     {
         $imageUploadDTO = new ImageUploadDTO($request->validated());
-
+        dd($imageUploadDTO->filename);
         $this->service->updateImages(Auth::user(), $imageUploadDTO);
 
         return response(['message' => 'Фотография успешно добавлена']);

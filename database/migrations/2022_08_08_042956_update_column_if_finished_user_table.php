@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->boolean('is_finished')->change();
-            $table->boolean('is_finished')->nullable();
 
         });
     }

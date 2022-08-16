@@ -12,12 +12,12 @@ use Prettus\Repository\Exceptions\RepositoryException;
 interface WorkersServiceInterface
 {
     /**
-     * @param User $user
+     * @param ?User $user
      * @return LengthAwarePaginator<User>
      * @throws Exception
      * @throws RepositoryException
      */
-    public function workers(User $user): LengthAwarePaginator;
+    public function workers(?User $user): LengthAwarePaginator;
 
     /**
      * @param int $user
