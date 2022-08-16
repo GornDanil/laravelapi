@@ -2,13 +2,15 @@
 
 namespace App\Services\Workers;
 
+use App\Domain\DTO\ImageUploadDTO;
+use App\Domain\DTO\UpdateUserDTO;
 use App\Domain\Enums\Departments\DepartmentsType;
+use App\Exceptions\AccessException;
+use App\Models\User;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use App\Repositories\Images\Abstracts\ImagesRepositoryInterface;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
-use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Symfony\Component\HttpFoundation\Response;
 
 class WorkersService implements WorkersServiceInterface
 {
@@ -17,8 +19,9 @@ class WorkersService implements WorkersServiceInterface
     /** @var UserRepositoryInterface */
     private UserRepositoryInterface $userRepository;
     private ImagesRepositoryInterface $imagesRepository;
+
     /** @param UserRepositoryInterface $userRepository */
-    public function __construct(UserRepositoryInterface $userRepository,
+    public function __construct(UserRepositoryInterface   $userRepository,
                                 ImagesRepositoryInterface $imagesRepository)
     {
         $this->userRepository = $userRepository;
@@ -29,7 +32,7 @@ class WorkersService implements WorkersServiceInterface
     /**
      * @inheritDoc
      */
-    public function workers(object $user): array|LengthAwarePaginator|Response
+    public function workers(User $user): LengthAwarePaginator
     {
         if ($user->role_type == DepartmentsType::WORKER) {
             return $this->userRepository->userWorker($user);
@@ -39,13 +42,13 @@ class WorkersService implements WorkersServiceInterface
             return $this->userRepository->userWorker($user);
         }
 
-        throw new Exception("У вас нет доступа к этой странице", 408);
+        throw new AccessException();
     }
 
     /**
      * @inheritDoc
      */
-    public function showUserWorker(int $user): ?object
+    public function showUserWorker(int $user): ?User
     {
         return $this->userRepository->with(['workPosition', 'departmentName'])->findWhere(['id' => $user])->first();
     }
@@ -53,26 +56,24 @@ class WorkersService implements WorkersServiceInterface
     /**
      * @inheritDoc
      */
-    public function updateUser($user, $updateUserDTO): Response
+    public function updateUser(?User $user, UpdateUserDTO $updateUserDTO): void
     {
-        $image = $updateUserDTO->toArray()['filename'];
-        if($image) {
-            $imageName = $image->getClientOriginalName();
-
-            if(count($this->imagesRepository->findWhere(['user_id' => $user->id])) != 0) {
-
-                return response([ "message" => "Ваш профиль обновлен. Нет возможности загрузить фотографию"]);
-            }
-
-            if($image != null) {
-                $image->move(public_path('images'), $imageName);
-            }
-
-            $this->imagesRepository->updateImage($imageName, $user);
-        }
-
         $this->userRepository->updateUser($user, $updateUserDTO);
+    }
 
-        return response(["message" => "Ваш профиль обновлен"]);
+
+    public function updateImages(User $user, ImageUploadDTO $imageDTO): void
+    {
+        if (isset($imageDTO->filename)) {
+            $image = $imageDTO->filename;
+
+            $imageName = $user->id . $image->getClientOriginalName();
+
+            $imageUser = $this->imagesRepository->create([
+                'filename' => 'app/images/' . $imageName
+            ]);
+            $image->move(public_path('images'), $imageName);
+            $this->userRepository->update(['image_id' => $imageUser->id], $user->id);
+        }
     }
 }

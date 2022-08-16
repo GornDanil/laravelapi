@@ -5,6 +5,7 @@ namespace App\Services\Departments;
 use App\Domain\Enums\Departments\DepartmentsType;
 use App\Exceptions\AccessException;
 use App\Models\Department;
+use App\Models\User;
 use App\Repositories\Departments\Abstracts\DepartmentRepositoryInterface;
 use App\Services\Departments\Abstracts\DepartmentsServiceInterface;
 use Exception;
@@ -22,9 +23,8 @@ class DepartmentsService implements DepartmentsServiceInterface
     }
 
     /** @inheritDoc
-     * @throws Exception
      */
-    public function DepartmentsAndWorkers(object $user): Collection|Department
+    public function DepartmentsAndWorkers(User $user): Collection|Department
     {
         if ($user->role_type == DepartmentsType::USER) {
             return $this->repository->all();

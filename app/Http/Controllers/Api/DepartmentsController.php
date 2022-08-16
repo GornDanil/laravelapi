@@ -21,7 +21,7 @@ class DepartmentsController extends Controller
     }
 
     /**
-     * @return Collection<Department>|Department|Response
+     * @return Collection<int, Department>|Department|Response
      */
     public function departments(): Collection|Department|Response
     {
