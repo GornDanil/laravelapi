@@ -17,8 +17,8 @@ interface UserRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param object $user
-     * @return LengthAwarePaginator
-     * @throws RepositoryException
+     * @return LengthAwarePaginator<User>
+     * @throws RepositoryExceptionreturn parent::toArray($request);
      */
     public function userWorker(object $user): LengthAwarePaginator;
 
@@ -28,11 +28,13 @@ interface UserRepositoryInterface extends RepositoryInterface
      * @throws RepositoryException
      */
     public function user(int $user): User;
+
     /**
      * @param int $user
-     * @return User
+     * @return User|null
+     * @throws RepositoryException
      */
-    public function userCard(int $user): User;
+    public function userCard(int $user): ?User;
 
     /**
      * @param User $user

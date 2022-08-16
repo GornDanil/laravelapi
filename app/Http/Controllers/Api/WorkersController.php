@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
+use App\Domain\DTO\ImageUploadDTO;
 use App\Domain\DTO\UpdateUserDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Authentication\ImageUploadRequest;
 use App\Http\Requests\Api\UpdateUserRequest;
 use App\Models\User;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
@@ -32,6 +35,16 @@ class WorkersController extends Controller
     }
 
     /**
+     * @return User
+     */
+    public function user(): object
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+        return $this->service->showUserWorker($user->id);
+    }
+
+    /**
      * @param int $user
      * @return object|Response
      */
@@ -41,20 +54,28 @@ class WorkersController extends Controller
     }
 
     /**
-     * @return object
-     */
-    public function user(): object
-    {
-        return $this->service->showUserWorker(Auth::user()->id);
-    }
-
-    /**
      * @param UpdateUserRequest $request
      * @return Response
      */
     public function updateUser(UpdateUserRequest $request): Response
     {
         $updateUserDTO = new UpdateUserDTO($request->validated());
-        return $this->service->updateUser(Auth::user(), $updateUserDTO);
+
+        $this->service->updateUser(Auth::user(), $updateUserDTO);
+
+        return response(["message" => "Ваш профиль обновлен"]);
+    }
+
+    /**
+     * @param ImageUploadRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateImages(ImageUploadRequest $request): \Illuminate\Http\Response
+    {
+        $imageUploadDTO = new ImageUploadDTO($request->validated());
+
+        $this->service->updateImages(Auth::user(), $imageUploadDTO);
+
+        return response(['message' => 'Фотография успешно добавлена']);
     }
 }

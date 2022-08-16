@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * App\Models\Image
- *
  * @mixin IdeHelperImage
  */
 class Image extends Model
@@ -15,13 +14,11 @@ class Image extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'filename'
     ];
 
     protected $hidden = [
         'id',
-        'user_id',
         'created_at',
         'updated_at'
     ];

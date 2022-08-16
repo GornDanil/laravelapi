@@ -2,34 +2,40 @@
 
 namespace App\Services\Workers\Abstracts;
 
+use App\Domain\DTO\ImageUploadDTO;
 use App\Domain\DTO\UpdateUserDTO;
 use App\Models\User;
 use Exception;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Prettus\Repository\Exceptions\RepositoryException;
-use Symfony\Component\HttpFoundation\Response;
 
 interface WorkersServiceInterface
 {
     /**
-     * @param object $user
-     * @throws RepositoryException
+     * @param User $user
+     * @return LengthAwarePaginator<User>
      * @throws Exception
-     * @return array<User>|LengthAwarePaginator|Response
+     * @throws RepositoryException
      */
-    public function workers(object $user): array|LengthAwarePaginator|Response;
+    public function workers(User $user): LengthAwarePaginator;
 
     /**
      * @param int $user
-     * @return object|null
+     * @return User|null
      */
-    public function showUserWorker(int $user): ?object;
+    public function showUserWorker(int $user): ?User;
 
     /**
-     * @param ?Authenticatable $user
+     * @param ?User $user
      * @param UpdateUserDTO $updateUserDTO
-     * @return Response
+     * @return void
      */
-    public function updateUser(?Authenticatable $user, UpdateUserDTO $updateUserDTO): Response;
+    public function updateUser(?User $user, UpdateUserDTO $updateUserDTO): void;
+
+    /**
+     * @param User $user
+     * @param ImageUploadDTO $imageDTO
+     * @return void
+     */
+    public function updateImages(User $user, ImageUploadDTO $imageDTO): void;
 }
