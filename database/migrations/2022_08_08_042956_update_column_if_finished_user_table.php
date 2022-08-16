@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('is_finished');
+            $table->boolean('is_finished')->change();
             $table->boolean('is_finished')->nullable();
 
         });
@@ -28,8 +28,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('is_finished');
-            $table->boolean('is_finished');
+            $table->string('is_finished')->change();
 
         });
     }
