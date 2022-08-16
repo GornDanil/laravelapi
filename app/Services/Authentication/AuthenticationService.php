@@ -3,12 +3,16 @@
 namespace App\Services\Authentication;
 
 use App\Domain\DTO\LoginDTO;
+use App\Domain\DTO\PasswordResetConfirmDTO;
 use App\Domain\DTO\RegistrationDTO;
 use App\Exceptions\AuthontificationException;
 use App\Exceptions\EmailNotUniqueException;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class AuthenticationService implements AuthenticationServiceInterface
 {
@@ -62,5 +66,21 @@ class AuthenticationService implements AuthenticationServiceInterface
         ];
     }
 
+    public function resetPassword(PasswordResetConfirmDTO $passwordResetDTO): string {
+        $passwordResetDTO = $passwordResetDTO->toArray();
 
+        return Password::reset(
+            $passwordResetDTO,
+            function ($user) use ($passwordResetDTO) {
+                $user->forceFill([
+                    'password' => Hash::make($passwordResetDTO['password']),
+                    'remember_token' => Str::random(64),
+                ])->save();
+
+                $user->tokens()->delete();
+
+                event(new PasswordReset($user));
+            }
+        );
+    }
 }

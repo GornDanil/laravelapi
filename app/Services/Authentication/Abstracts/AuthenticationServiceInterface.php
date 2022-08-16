@@ -3,6 +3,7 @@
 namespace App\Services\Authentication\Abstracts;
 
 use App\Domain\DTO\LoginDTO;
+use App\Domain\DTO\PasswordResetConfirmDTO;
 use App\Domain\DTO\RegistrationDTO;
 use Exception;
 
@@ -21,4 +22,10 @@ interface AuthenticationServiceInterface
      * @throws Exception
      */
     public function login(LoginDTO $data): array;
+
+    /**
+     * @param PasswordResetConfirmDTO $passwordResetDTO
+     * @return string
+     */
+    public function resetPassword(PasswordResetConfirmDTO $passwordResetDTO): string;
 }

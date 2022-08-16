@@ -41,11 +41,13 @@ class WorkersController extends Controller
     }
 
     /**
-     * @return object
+     * @return User
      */
     public function user(): object
     {
-        return $this->service->showUserWorker(Auth::user()->id);
+        /** @var User|null $user */
+        $user = Auth::user();
+        return $this->service->showUserWorker($user->id);
     }
 
     /**
@@ -55,6 +57,9 @@ class WorkersController extends Controller
     public function updateUser(UpdateUserRequest $request): Response
     {
         $updateUserDTO = new UpdateUserDTO($request->validated());
-        return $this->service->updateUser(Auth::user(), $updateUserDTO);
+
+        $this->service->updateUser(Auth::user(), $updateUserDTO);
+
+        return response(["message" => "Ваш профиль обновлен"]);
     }
 }

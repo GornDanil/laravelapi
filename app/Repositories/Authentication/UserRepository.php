@@ -5,6 +5,7 @@ namespace App\Repositories\Authentication;
 use App\Domain\DTO\UpdateUserDTO;
 use App\Models\User;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Exceptions\RepositoryException;
@@ -37,13 +38,22 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     }
 
-    /** @inheritDoc
-     * @throws RepositoryException
+    /**
+     * @inheritDoc
      */
-    public function userCard(int $user): User
+    public function userCard(int $user): ?User
     {
+        /** @var Builder $query */
         $query = $this->makeModel();
-        return $query->where('id', $user)->select(['id', 'login', 'name', 'email', 'about', 'role_type', 'city', 'phone', 'birthday'])->first();
+
+        $query = $query->where('id', $user)
+            ->select(
+                ['id', 'login', 'name', 'email', 'about', 'role_type', 'city', 'phone', 'birthday']
+            );
+
+        /** @var User|null $model */
+        $model = $query->first();
+        return $model;
     }
 
     /**

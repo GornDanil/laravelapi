@@ -28,7 +28,7 @@ class UpdateUserRequest extends FormRequest
             'city' => 'required|string',
             'birthday' => 'required|string',
             'phone' => 'sometimes|nullable|present|string',
-            "filename" => 'image'
+            "filename" => 'file'
         ];
     }
 }

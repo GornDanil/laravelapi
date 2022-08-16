@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Domain\DTO\PasswordResetConfirmDTO;
+use App\Domain\DTO\PasswordResetDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Authentication\PasswordResetRequest;
+use App\Http\Requests\EmailRequest;
+use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -17,17 +21,27 @@ use Illuminate\Validation\ValidationException;
 
 class ResetPasswordController extends Controller
 {
+    /** @var AuthenticationServiceInterface */
+    private AuthenticationServiceInterface $service;
+
+    /** @param AuthenticationServiceInterface $service */
+    public function __construct(AuthenticationServiceInterface $service)
+    {
+        $this->service = $service;
+    }
     /**
-     * @param Request $request
+     * @param EmailRequest $request
      * @return array<string>
      * @throws ValidationException
      */
-    public function forgotPassword(Request $request): array
+    public function forgotPassword(EmailRequest $request): array
     {
+        $passwordResetDTO = new PasswordResetDTO($request->validated());
 
+        $passwordResetDTO = $passwordResetDTO->toArray();
 
         $status = Password::sendResetLink(
-            $request->only('email')
+            $passwordResetDTO['email']
         );
 
         if ($status == Password::RESET_LINK_SENT) {
@@ -43,30 +57,13 @@ class ResetPasswordController extends Controller
 
     /**
      * @param PasswordResetRequest $request
-     * @return Application|ResponseFactory|Response
+     * @return Response|Application|ResponseFactory
      */
     public function reset(PasswordResetRequest $request): Response|Application|ResponseFactory
     {
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => ['required', 'confirmed', RulesPassword::defaults()],
-        ]);
+        $passwordResetDTO = new PasswordResetConfirmDTO($request->validated());
 
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) use ($request) {
-                $user->forceFill([
-                    'password' => Hash::make($request['password']),
-                    'remember_token' => Str::random(64),
-                ])->save();
-
-                $user->tokens()->delete();
-
-                event(new PasswordReset($user));
-            }
-        );
-
+        $status = $this->service->resetPassword($passwordResetDTO);
         if ($status == Password::PASSWORD_RESET) {
             return response([
                 'message' => 'Вы успешно сменили пароль'
@@ -76,6 +73,5 @@ class ResetPasswordController extends Controller
         return response([
             'message' => __($status)
         ], 404);
-
     }
 }

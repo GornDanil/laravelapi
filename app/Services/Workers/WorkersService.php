@@ -2,7 +2,11 @@
 
 namespace App\Services\Workers;
 
+use App\Domain\DTO\UpdateUserDTO;
 use App\Domain\Enums\Departments\DepartmentsType;
+use App\Exceptions\AccessException;
+use App\Models\Image;
+use App\Models\User;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use App\Repositories\Images\Abstracts\ImagesRepositoryInterface;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
@@ -29,7 +33,7 @@ class WorkersService implements WorkersServiceInterface
     /**
      * @inheritDoc
      */
-    public function workers(object $user): array|LengthAwarePaginator|Response
+    public function workers(User $user): LengthAwarePaginator
     {
         if ($user->role_type == DepartmentsType::WORKER) {
             return $this->userRepository->userWorker($user);
@@ -39,13 +43,13 @@ class WorkersService implements WorkersServiceInterface
             return $this->userRepository->userWorker($user);
         }
 
-        throw new Exception("У вас нет доступа к этой странице", 408);
+        throw new AccessException();
     }
 
     /**
      * @inheritDoc
      */
-    public function showUserWorker(int $user): ?object
+    public function showUserWorker(int $user): ?User
     {
         return $this->userRepository->with(['workPosition', 'departmentName'])->findWhere(['id' => $user])->first();
     }
@@ -53,26 +57,25 @@ class WorkersService implements WorkersServiceInterface
     /**
      * @inheritDoc
      */
-    public function updateUser($user, $updateUserDTO): Response
+    public function updateUser(?User $user, UpdateUserDTO $updateUserDTO): void
     {
-        $image = $updateUserDTO->toArray()['filename'];
+        $image = $updateUserDTO->filename;
         if($image) {
             $imageName = $image->getClientOriginalName();
 
-            if(count($this->imagesRepository->findWhere(['user_id' => $user->id])) != 0) {
-
-                return response([ "message" => "Ваш профиль обновлен. Нет возможности загрузить фотографию"]);
-            }
 
             if($image != null) {
                 $image->move(public_path('images'), $imageName);
             }
 
-            $this->imagesRepository->updateImage($imageName, $user);
+            /** @var Image $i */
+            $i = $this->imagesRepository->create([
+                'user_id' => $user->id,
+                'filename' => 'app/images/'.$image
+            ]);
         }
 
         $this->userRepository->updateUser($user, $updateUserDTO);
 
-        return response(["message" => "Ваш профиль обновлен"]);
     }
 }

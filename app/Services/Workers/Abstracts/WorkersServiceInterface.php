@@ -13,23 +13,23 @@ use Symfony\Component\HttpFoundation\Response;
 interface WorkersServiceInterface
 {
     /**
-     * @param object $user
+     * @param User $user
      * @throws RepositoryException
      * @throws Exception
-     * @return array<User>|LengthAwarePaginator|Response
+     * @return LengthAwarePaginator<User>
      */
-    public function workers(object $user): array|LengthAwarePaginator|Response;
+    public function workers(User $user): LengthAwarePaginator;
 
     /**
      * @param int $user
-     * @return object|null
+     * @return User|null
      */
-    public function showUserWorker(int $user): ?object;
+    public function showUserWorker(int $user): ?User;
 
     /**
-     * @param ?Authenticatable $user
+     * @param ?User $user
      * @param UpdateUserDTO $updateUserDTO
-     * @return Response
+     * @return void
      */
-    public function updateUser(?Authenticatable $user, UpdateUserDTO $updateUserDTO): Response;
+    public function updateUser(?User $user, UpdateUserDTO $updateUserDTO): void;
 }
