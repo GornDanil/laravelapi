@@ -4,20 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Domain\DTO\PasswordResetConfirmDTO;
 use App\Domain\DTO\PasswordResetDTO;
+use App\Exceptions\ResetPasswordErrorException;
+use App\Exceptions\ResetPasswordException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Authentication\PasswordResetRequest;
-use App\Http\Requests\EmailRequest;
+use App\Http\Requests\Api\Authentication\EmailRequest;
+use App\Http\Resources\UserResource;
 use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
+use Exception;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Password as RulesPassword;
-use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 
 class ResetPasswordController extends Controller
 {
@@ -29,49 +25,43 @@ class ResetPasswordController extends Controller
     {
         $this->service = $service;
     }
+
     /**
      * @param EmailRequest $request
-     * @return array<string>
-     * @throws ValidationException
+     * @return Response
      */
-    public function forgotPassword(EmailRequest $request): array
+    public function forgotPassword(EmailRequest $request): Response
     {
         $passwordResetDTO = new PasswordResetDTO($request->validated());
 
-        $passwordResetDTO = $passwordResetDTO->toArray();
+        $passwordDTO = $passwordResetDTO->toArray();
 
         $status = Password::sendResetLink(
-            $passwordResetDTO['email']
+            $passwordDTO
         );
 
-        if ($status == Password::RESET_LINK_SENT) {
-            return [
-                'status' => __($status)
-            ];
+        if (!$status == Password::RESET_LINK_SENT) {
+            throw new ResetPasswordException();
         }
 
-        throw ValidationException::withMessages([
-            'email' => [trans($status)],
-        ]);
+        return response(['message' => 'Ссылка для сброса пароля отправлена на вашу почту']);
     }
 
     /**
      * @param PasswordResetRequest $request
-     * @return Response|Application|ResponseFactory
+     * @return UserResource
+     * @throws Exception
      */
-    public function reset(PasswordResetRequest $request): Response|Application|ResponseFactory
+    public function reset(PasswordResetRequest $request): UserResource
     {
         $passwordResetDTO = new PasswordResetConfirmDTO($request->validated());
 
         $status = $this->service->resetPassword($passwordResetDTO);
+
         if ($status == Password::PASSWORD_RESET) {
-            return response([
-                'message' => 'Вы успешно сменили пароль'
-            ]);
+            return new UserResource($this->service->login($passwordResetDTO));
         }
 
-        return response([
-            'message' => __($status)
-        ], 404);
+        throw new ResetPasswordErrorException();
     }
 }

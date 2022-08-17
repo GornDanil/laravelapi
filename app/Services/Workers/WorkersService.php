@@ -20,7 +20,10 @@ class WorkersService implements WorkersServiceInterface
     private UserRepositoryInterface $userRepository;
     private ImagesRepositoryInterface $imagesRepository;
 
-    /** @param UserRepositoryInterface $userRepository */
+    /**
+     * @param UserRepositoryInterface $userRepository
+     * @param ImagesRepositoryInterface $imagesRepository
+     */
     public function __construct(UserRepositoryInterface   $userRepository,
                                 ImagesRepositoryInterface $imagesRepository)
     {
@@ -28,17 +31,12 @@ class WorkersService implements WorkersServiceInterface
         $this->imagesRepository = $imagesRepository;
     }
 
-
     /**
      * @inheritDoc
      */
     public function workers(User $user): LengthAwarePaginator
     {
-        if ($user->role_type == DepartmentsType::WORKER) {
-            return $this->userRepository->userWorker($user);
-        }
-
-        if ($user->role_type == DepartmentsType::ADMIN) {
+        if (in_array($user->role_type, [DepartmentsType::WORKER, DepartmentsType::ADMIN])) {
             return $this->userRepository->userWorker($user);
         }
 
@@ -61,19 +59,31 @@ class WorkersService implements WorkersServiceInterface
         $this->userRepository->updateUser($user, $updateUserDTO);
     }
 
-
-    public function updateImages(User $user, ImageUploadDTO $imageDTO): void
+    /**
+     * @param User $user
+     * @param ImageUploadDTO $imageDTO
+     * @return int
+     */
+    public function uploadImages(User $user, ImageUploadDTO $imageDTO): int
     {
         if (isset($imageDTO->filename)) {
             $image = $imageDTO->filename;
-
             $imageName = $user->id . $image->getClientOriginalName();
 
             $imageUser = $this->imagesRepository->create([
                 'filename' => 'app/images/' . $imageName
             ]);
-            $image->move(public_path('images'), $imageName);
-            $this->userRepository->update(['image_id' => $imageUser->id], $user->id);
+
+            $image->move(storage_path('images'), $imageName);
+            
+            return $imageUser->id;
         }
+        return false;
+    }
+
+    /** @inheritDoc */
+    public function updateImages(User $user, $id): void
+    {
+            $this->userRepository->update(['image_id' => $id], $user->id);
     }
 }

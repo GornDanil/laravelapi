@@ -22,24 +22,22 @@ class DepartmentsService implements DepartmentsServiceInterface
         $this->repository = $repository;
     }
 
-    /** @inheritDoc
-     */
-    public function DepartmentsAndWorkers(User $user): Collection|Department
+    /** @inheritDoc */
+    public function departmentsUser(User $user): Collection
     {
-        if ($user->role_type == DepartmentsType::USER) {
             return $this->repository->all();
-        }
-
-        if ($user->role_type == DepartmentsType::WORKER) {
-            return $this->repository->with('workers.workerAtDepartment')->find($user->departments_id);
-        }
-
-        if ($user->role_type == DepartmentsType::ADMIN) {
-            return $this->repository->with('workers.workerAtDepartment')->all();
-        }
-
-        throw new AccessException();
     }
 
+    /** @inheritDoc */
+    public function departmentsWorker(User $user): Department
+    {
+        return $this->repository->with('workers.workerAtDepartment')->find($user->departments_id);
+    }
+
+    /** @inheritDoc */
+    public function departmentsAdmin(User $user): Collection
+    {
+        return $this->repository->with('workers.workerAtDepartment')->all();
+    }
 
 }

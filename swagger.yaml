@@ -19,17 +19,6 @@ paths:
       - Авторизация
       summary: Авторизация
       description: Если почта и пароль совпадают, то выдается токен и информация о пользователе
-      parameters:
-        - name: email
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: password
-          in: path
-          required: true
-          schema:
-            type: string
       requestBody:
         description: Валидация полученных данных
         content:
@@ -53,47 +42,6 @@ paths:
       tags:
       - Авторизация
       summary: Регистрация пользователя
-      parameters:
-        - name: login
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: about
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: city
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: birthday
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: phone
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: email
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: password
-          in: path
-          required: true
-          schema:
-            type: string
       requestBody:
         description: Валидация полученных данных
         content:
@@ -118,12 +66,13 @@ paths:
       tags:
         - Авторизация
       summary: Форма для заявки на восстановление пароля
-      parameters:
-        - name: email
-          in: path
-          required: true
-          schema:
-            type: string
+
+      requestBody:
+        description: Валидация полученных данных
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailRequest'
       responses:
         "200":
           description: Запрос был отправлен
@@ -134,22 +83,6 @@ paths:
       tags:
         - Авторизация
       summary: Подтверждение восстановления пароля
-      parameters:
-        - name: token
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: password
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: password_confirmation
-          in: path
-          required: true
-          schema:
-            type: string
       requestBody:
         description: Валидация полученных данных
         content:
@@ -242,32 +175,6 @@ paths:
         - Прочее
       summary: Изменение данных пользователя
       description: Доступно только для зарегистрированных пользователей
-      parameters:
-        - name: about
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: city
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: birthday
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: phone
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: filename
-          in: path
-          required: true
-          schema:
-            type: string
       requestBody:
         description: Валидация полученных данных
         content:
@@ -323,6 +230,8 @@ components:
           type: string
         birthday:
           type: string
+        password:
+          type: string
     UpdateUserRequest:
       type: object
       properties:
@@ -335,6 +244,11 @@ components:
         phone:
           type: string
         filename:
+          type: string
+    EmailRequest:
+      type: object
+      properties:
+        email:
           type: string
     Authentication:
       type: object

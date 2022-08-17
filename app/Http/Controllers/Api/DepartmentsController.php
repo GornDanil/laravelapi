@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Domain\Enums\Departments\DepartmentsType;
+use App\Exceptions\AccessException;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Services\Departments\Abstracts\DepartmentsServiceInterface;
@@ -21,10 +23,24 @@ class DepartmentsController extends Controller
     }
 
     /**
-     * @return Collection<int, Department>|Department|Response
+     * @return Collection<int, Department>|Department
      */
-    public function departments(): Collection|Department|Response
+    public function departments(): Collection|Department
     {
-        return $this->service->DepartmentsAndWorkers(Auth::user());
+        $user  = Auth::user();
+
+        if ($user->role_type == DepartmentsType::USER) {
+            return $this->service->departmentsUser($user);
+        }
+
+        if ($user->role_type == DepartmentsType::WORKER) {
+            return $this->service->departmentsWorker($user);
+        }
+
+        if ($user->role_type == DepartmentsType::ADMIN) {
+            return $this->service->departmentsAdmin($user);
+        }
+
+        throw new AccessException();
     }
 }

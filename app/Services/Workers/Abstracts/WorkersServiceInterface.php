@@ -13,9 +13,7 @@ interface WorkersServiceInterface
 {
     /**
      * @param User $user
-     * @return LengthAwarePaginator<User>
-     * @throws Exception
-     * @throws RepositoryException
+     * @return LengthAwarePaginator
      */
     public function workers(User $user): LengthAwarePaginator;
 
@@ -34,8 +32,15 @@ interface WorkersServiceInterface
 
     /**
      * @param User $user
-     * @param ImageUploadDTO $imageDTO
+     * @param int $id
      * @return void
      */
-    public function updateImages(User $user, ImageUploadDTO $imageDTO): void;
+    public function updateImages(User $user,int $id): void;
+
+    /**
+     * @param User $user
+     * @param ImageUploadDTO $imageDTO
+     * @return int
+     */
+    public function uploadImages(User $user, ImageUploadDTO $imageDTO): int;
 }

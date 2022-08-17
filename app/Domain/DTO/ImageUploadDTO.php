@@ -2,6 +2,9 @@
 
 namespace App\Domain\DTO;
 
+use Illuminate\Http\UploadedFile;
+use phpDocumentor\Reflection\File;
+
 /**
  * Class Search
  *
@@ -9,8 +12,8 @@ namespace App\Domain\DTO;
  */
 class ImageUploadDTO extends DTO
 {
-    /** @var string|null */
-    public mixed $filename;
+    /** @var UploadedFile */
+    public UploadedFile $filename;
 
 
 }

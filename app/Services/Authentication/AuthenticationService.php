@@ -7,7 +7,7 @@ use App\Domain\DTO\PasswordResetConfirmDTO;
 use App\Domain\DTO\RegistrationDTO;
 use App\Exceptions\AuthontificationException;
 use App\Exceptions\EmailNotUniqueException;
-use App\Http\Resources\UserResource;
+use App\Models\User;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use App\Services\Authentication\Abstracts\AuthenticationServiceInterface;
 use Illuminate\Auth\Events\PasswordReset;
@@ -32,13 +32,12 @@ class AuthenticationService implements AuthenticationServiceInterface
     /**
      * @inheritDoc
      */
-    public function registration(RegistrationDTO $data): UserResource
+    public function registration(RegistrationDTO $data): User
     {
         if (count($this->repository->findWhere(['email' => $data->email])) == 0) {
             $data->password = Hash::make($data->password);
 
-            $user = $this->repository->create($data->toArray());
-            return new UserResource($user);
+            return $this->repository->create($data->toArray());
         }
         throw new EmailNotUniqueException();
     }
@@ -46,7 +45,7 @@ class AuthenticationService implements AuthenticationServiceInterface
     /**
      * @inheritDoc
      */
-    public function login(LoginDTO $data): UserResource
+    public function login(LoginDTO|PasswordResetConfirmDTO $data): User
     {
         $dataUser = $this->repository->findWhere(['email' => $data->email]);
 
@@ -58,10 +57,12 @@ class AuthenticationService implements AuthenticationServiceInterface
         if (!Hash::check($data->password, $user->password)) {
             throw new AuthontificationException();
         }
-        return new UserResource($user);
+        return $user;
     }
 
-    public function resetPassword(PasswordResetConfirmDTO $passwordResetDTO): string {
+    /** @inheritDoc */
+    public function resetPassword(PasswordResetConfirmDTO $passwordResetDTO): string
+    {
         $passwordResetDTO = $passwordResetDTO->toArray();
 
         return Password::reset(

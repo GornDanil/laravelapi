@@ -9,6 +9,9 @@ use App\Http\Requests\Api\Authentication\ImageUploadRequest;
 use App\Http\Requests\Api\UpdateUserRequest;
 use App\Models\User;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Prettus\Repository\Exceptions\RepositoryException;
@@ -16,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WorkersController extends Controller
 {
+
     /** @var WorkersServiceInterface $service */
     private WorkersServiceInterface $service;
 
@@ -26,18 +30,19 @@ class WorkersController extends Controller
     }
 
     /**
-     * @return array<User>|LengthAwarePaginator|Response
-     * @throws RepositoryException
+     * @return LengthAwarePaginator
      */
-    public function workersList(): array|LengthAwarePaginator|Response
+    public function workersList(): LengthAwarePaginator
     {
-        return $this->service->workers(Auth::user());
+        /** @var ?User $user */
+        $user = Auth::user();
+        return $this->service->workers($user);
     }
 
     /**
      * @return User
      */
-    public function user(): object
+    public function user(): User
     {
         /** @var User|null $user */
         $user = Auth::user();
@@ -68,14 +73,26 @@ class WorkersController extends Controller
 
     /**
      * @param ImageUploadRequest $request
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function updateImages(ImageUploadRequest $request): \Illuminate\Http\Response
+    public function uploadImages(ImageUploadRequest $request): RedirectResponse
     {
         $imageUploadDTO = new ImageUploadDTO($request->validated());
+        $image = $this->service->uploadImages(Auth::user(), $imageUploadDTO);
 
-        $this->service->updateImages(Auth::user(), $imageUploadDTO);
+        return redirect()->route('updateImage', ['id' => $image]);
+    }
 
-        return response(['message' => 'Фотография успешно добавлена']);
+    /**
+     * @param int $id
+     * @return Response
+     */
+    public function updateImages(int $id): Response
+    {
+        $user = Auth::user();
+
+        $this->service->updateImages($user, $id);
+
+        return response(['message' => 'Аватарка обновлена']);
     }
 }

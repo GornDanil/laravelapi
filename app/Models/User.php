@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Notifications\PasswordResetNotification;
 use Eloquent;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +16,7 @@ use Laravel\Sanctum\HasApiTokens;
  * App\Models\User
  * @mixin IdeHelperUser
  */
-class User extends \TCG\Voyager\Models\User
+class User extends \TCG\Voyager\Models\User implements CanResetPassword
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -47,9 +48,6 @@ class User extends \TCG\Voyager\Models\User
         'email_verified_at',
         'created_at',
         'updated_at',
-        'departments_id',
-        'workers_id',
-        'role_id',
 
     ];
 
@@ -61,37 +59,27 @@ class User extends \TCG\Voyager\Models\User
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
     /** @var array<string> */
     protected $with = [
         'image',
     ];
-
-
 
     /** @return BelongsTo */
     public function departmentName(): BelongsTo
     {
         return $this->belongsTo(Department::class, 'departments_id');
     }
+
     /** @return BelongsTo */
     public function image(): BelongsTo
     {
-        return $this->belongsTo(image::class, 'image_id');
+        return $this->belongsTo(Image::class, 'image_id');
     }
+
     /** @return BelongsTo */
     public function workPosition(): BelongsTo
     {
         return $this->belongsTo(Worker::class, 'workers_id');
-    }
-    /**
-     * @param $token
-     * @return void
-     */
-    public function sendPasswordResetNotification($token): void
-    {
-
-        $url = $token;
-
-        $this->notify(new PasswordResetNotification($url));
     }
 }

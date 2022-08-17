@@ -33,8 +33,9 @@ class AuthenticationController extends Controller
 
         $LoginDTO = new loginDTO($data);
 
-        return $this->service->login($LoginDTO);
+        $user = $this->service->login($LoginDTO);
 
+        return new UserResource($user);
     }
 
     /**
@@ -44,6 +45,7 @@ class AuthenticationController extends Controller
      */
     public function registration(RegisterRequest $request): UserResource
     {
-        return $this->service->registration(new RegistrationDTO($request->validated()));
+        $user = $this->service->registration(new RegistrationDTO($request->validated()));
+        return new UserResource($user);
     }
 }
