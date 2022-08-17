@@ -9,20 +9,15 @@ use Illuminate\Database\Eloquent\Collection;
 interface DepartmentsServiceInterface
 {
     /**
-     * @param User $user
      * @return Collection
      */
-    public function departmentsUser(User $user): Collection;
+    public function departments(): Collection;
 
     /**
-     * @param User $user
+     * @param int $departmentId
      * @return Department
      */
-    public function departmentsWorker(User $user): Department;
+    public function department(int $departmentId): Department;
 
-    /**
-     * @param User $user
-     * @return Collection
-     */
-    public function departmentsAdmin(User $user): Collection;
+
 }

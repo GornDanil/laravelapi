@@ -136,6 +136,12 @@ paths:
         - Прочее
       summary: Просмотр данных сотрудника
       description: Доступно только для зарегистрированных пользователей
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: integer
       responses:
         "200":
           description: Информация о пользователе
@@ -153,12 +159,6 @@ paths:
         - Прочее
       summary: Просмотр данных пользователя
       description: Доступно только для зарегистрированных пользователей
-      parameters:
-        - name: user
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         "200":
           description: Информация о пользователе
@@ -314,6 +314,11 @@ components:
           type: integer
         name:
           type: string
+        UserWorkers:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/WorkersUser'
     WorkersUser:
       type: object
       properties:

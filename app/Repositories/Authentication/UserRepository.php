@@ -65,13 +65,5 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $query->where('id', $user)->with(['workPosition', 'departmentName'])->first();
     }
 
-    /** @inheritDoc */
-    public function updateUser(User $user, UpdateUserDTO $updateUserDTO): void
-    {
-        $user->update(['about' => $updateUserDTO->about,
-            'city' => $updateUserDTO->city,
-            'birthday' => $updateUserDTO->birthday,
-            'phone' => $updateUserDTO->phone,
-        ]);
-    }
+
 }

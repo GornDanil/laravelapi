@@ -6,11 +6,14 @@ use App\Domain\DTO\ImageUploadDTO;
 use App\Domain\DTO\UpdateUserDTO;
 use App\Domain\Enums\Departments\DepartmentsType;
 use App\Exceptions\AccessException;
+use App\Models\Image;
 use App\Models\User;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use App\Repositories\Images\Abstracts\ImagesRepositoryInterface;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
 
 class WorkersService implements WorkersServiceInterface
 {
@@ -24,7 +27,7 @@ class WorkersService implements WorkersServiceInterface
      *
      * @param UserRepositoryInterface $userRepository
      * @param ImagesRepositoryInterface $imagesRepository
-    
+
      * @param ImagesRepositoryInterface $imagesRepository
      */
     public function __construct(UserRepositoryInterface   $userRepository,
@@ -59,15 +62,21 @@ class WorkersService implements WorkersServiceInterface
      */
     public function updateUser(?User $user, UpdateUserDTO $updateUserDTO): void
     {
-        $this->userRepository->updateUser($user, $updateUserDTO);
+        $this->userRepository->update([
+            'about' => $updateUserDTO->about,
+            'city' => $updateUserDTO->city,
+            'birthday' => $updateUserDTO->birthday,
+            'phone' => $updateUserDTO->phone,
+
+        ], $user->id);
     }
 
     /**
      * @param User $user
      * @param ImageUploadDTO $imageDTO
-     * @return int
+     * @return ?Image
      */
-    public function uploadImages(User $user, ImageUploadDTO $imageDTO): int
+    public function uploadImages(User $user, ImageUploadDTO $imageDTO): ?Image
     {
         if (isset($imageDTO->filename)) {
             $image = $imageDTO->filename;
@@ -77,15 +86,15 @@ class WorkersService implements WorkersServiceInterface
                 'filename' => 'app/images/' . $imageName
             ]);
 
-            $image->move(storage_path('images'), $imageName);
-            
-            return $imageUser->id;
+            Storage::drive("public")->putFileAs('images', new File('/images/'), $imageName);
+
+            return $imageUser;
         }
-        return false;
+        return null;
     }
 
     /** @inheritDoc */
-    public function updateImages(User $user, $id): void
+    public function updateImages(User $user, int $id): void
     {
             $this->userRepository->update(['image_id' => $id], $user->id);
     }

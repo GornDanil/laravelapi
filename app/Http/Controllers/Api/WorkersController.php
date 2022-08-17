@@ -7,6 +7,7 @@ use App\Domain\DTO\UpdateUserDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Authentication\ImageUploadRequest;
 use App\Http\Requests\Api\UpdateUserRequest;
+use App\Http\Resources\UserIdResource;
 use App\Models\User;
 use App\Services\Workers\Abstracts\WorkersServiceInterface;
 use Illuminate\Contracts\Foundation\Application;
@@ -73,14 +74,15 @@ class WorkersController extends Controller
 
     /**
      * @param ImageUploadRequest $request
-     * @return RedirectResponse
+     * @return ?UserIdResource
      */
-    public function uploadImages(ImageUploadRequest $request): RedirectResponse
+    public function uploadImages(ImageUploadRequest $request): ?UserIdResource
     {
         $imageUploadDTO = new ImageUploadDTO($request->validated());
+
         $image = $this->service->uploadImages(Auth::user(), $imageUploadDTO);
 
-        return redirect()->route('updateImage', ['id' => $image]);
+        return new UserIdResource($image->id);
     }
 
     /**

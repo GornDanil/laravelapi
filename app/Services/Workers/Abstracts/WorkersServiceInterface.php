@@ -4,6 +4,7 @@ namespace App\Services\Workers\Abstracts;
 
 use App\Domain\DTO\ImageUploadDTO;
 use App\Domain\DTO\UpdateUserDTO;
+use App\Models\Image;
 use App\Models\User;
 use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -40,7 +41,7 @@ interface WorkersServiceInterface
     /**
      * @param User $user
      * @param ImageUploadDTO $imageDTO
-     * @return int
+     * @return ?Image
      */
-    public function uploadImages(User $user, ImageUploadDTO $imageDTO): int;
+    public function uploadImages(User $user, ImageUploadDTO $imageDTO): ?Image;
 }

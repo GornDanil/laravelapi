@@ -3,34 +3,29 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin User
  */
-class UserResource extends JsonResource
+class UserWorkerResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
-     * @return array
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
-    public function toArray($request): array
+    public function toArray($request)
     {
-
         return [
             'id' => $this->id,
-            'login' => $this->login,
             'name' => $this->name,
             'email' => $this->email,
             'about' => $this->about,
-            'role_type' => $this->role_type,
             'city' => $this->city,
             'phone' => $this->phone,
             'birthday' => $this->birthday,
-            'token' => $this->createToken('token')->plainTextToken,
         ];
     }
 }

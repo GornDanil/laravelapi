@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Domain\Enums\Departments\DepartmentsType;
 use App\Exceptions\AccessException;
 use App\Http\Controllers\Controller;
-use App\Models\Department;
+use App\Http\Resources\DepartmentResource;
 use App\Services\Departments\Abstracts\DepartmentsServiceInterface;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
 
 class DepartmentsController extends Controller
 {
@@ -23,24 +22,20 @@ class DepartmentsController extends Controller
     }
 
     /**
-     * @return Collection<int, Department>|Department
+     * @return AnonymousResourceCollection
      */
-    public function departments(): Collection|Department
+    public function departments(): AnonymousResourceCollection
     {
-        $user  = Auth::user();
 
-        if ($user->role_type == DepartmentsType::USER) {
-            return $this->service->departmentsUser($user);
+        $user = Auth::user();
+        if($user->role_type == null) {
+            throw new AccessException();
         }
 
         if ($user->role_type == DepartmentsType::WORKER) {
-            return $this->service->departmentsWorker($user);
+            return DepartmentResource::collection([$this->service->department($user->departments_id)]);
+        } else {
+            return DepartmentResource::collection($this->service->departments());
         }
-
-        if ($user->role_type == DepartmentsType::ADMIN) {
-            return $this->service->departmentsAdmin($user);
-        }
-
-        throw new AccessException();
     }
 }

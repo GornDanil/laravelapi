@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Authentication\Abstracts;
 
-use App\Domain\DTO\UpdateUserDTO;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Prettus\Repository\Contracts\RepositoryInterface;
@@ -18,7 +17,7 @@ interface UserRepositoryInterface extends RepositoryInterface
     /**
      * @param object $user
      * @return LengthAwarePaginator<User>
-     * @throws RepositoryExceptionreturn parent::toArray($request);
+     * @throws RepositoryException
      */
     public function userWorker(object $user): LengthAwarePaginator;
 
@@ -36,10 +35,4 @@ interface UserRepositoryInterface extends RepositoryInterface
      */
     public function userCard(int $user): ?User;
 
-    /**
-     * @param User $user
-     * @param UpdateUserDTO $updateUserDTO
-     * @return void
-     */
-    public function updateUser(User $user, UpdateUserDTO $updateUserDTO): void;
 }

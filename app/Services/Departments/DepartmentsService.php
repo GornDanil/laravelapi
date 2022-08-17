@@ -23,21 +23,16 @@ class DepartmentsService implements DepartmentsServiceInterface
     }
 
     /** @inheritDoc */
-    public function departmentsUser(User $user): Collection
+    public function departments(): Collection
     {
-            return $this->repository->all();
+            return $this->repository->with('workers.workerAtDepartment')->all();
     }
 
     /** @inheritDoc */
-    public function departmentsWorker(User $user): Department
+    public function department(int $departmentId): Department
     {
-        return $this->repository->with('workers.workerAtDepartment')->find($user->departments_id);
+        return $this->repository->with('workers.workerAtDepartment')->find($departmentId);
     }
 
-    /** @inheritDoc */
-    public function departmentsAdmin(User $user): Collection
-    {
-        return $this->repository->with('workers.workerAtDepartment')->all();
-    }
 
 }
