@@ -21,7 +21,10 @@ class WorkersService implements WorkersServiceInterface
     private ImagesRepositoryInterface $imagesRepository;
 
     /**
+     *
      * @param UserRepositoryInterface $userRepository
+     * @param ImagesRepositoryInterface $imagesRepository
+    
      * @param ImagesRepositoryInterface $imagesRepository
      */
     public function __construct(UserRepositoryInterface   $userRepository,
@@ -34,7 +37,7 @@ class WorkersService implements WorkersServiceInterface
     /**
      * @inheritDoc
      */
-    public function workers(User $user): LengthAwarePaginator
+    public function workers(?User $user): LengthAwarePaginator
     {
         if (in_array($user->role_type, [DepartmentsType::WORKER, DepartmentsType::ADMIN])) {
             return $this->userRepository->userWorker($user);

@@ -14,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 /**
  * App\Models\User
+ *
  * @mixin IdeHelperUser
  */
 class User extends \TCG\Voyager\Models\User implements CanResetPassword
