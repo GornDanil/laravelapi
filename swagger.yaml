@@ -188,6 +188,44 @@ paths:
           description: Any expected error
       security:
         - auth: [ ]
+  /user/uploadImages:
+    get:
+      tags:
+        - Прочее
+      summary: Загрузка изображения
+      description: Доступно только для зарегистрированных пользователей
+      requestBody:
+        description: Валидация полученных данных
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadRequest'
+      responses:
+        "200":
+          description: Image upload
+        default:
+          description: Any expected error
+      security:
+        - auth: [ ]
+  /user/updateImages:
+    get:
+      tags:
+        - Прочее
+      summary: Обновление изображения
+      description: Доступно только для зарегистрированных пользователей
+      requestBody:
+        description: Валидация полученных данных
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateImage'
+      responses:
+        "200":
+          description: Image update
+        default:
+          description: Any expected error
+      security:
+        - auth: [ ]
 components:
   schemas:
     LoginRequest:
@@ -245,6 +283,16 @@ components:
           type: string
         filename:
           type: string
+    UploadRequest:
+      type: object
+      properties:
+        filename:
+          type: object
+    UpdateImage:
+      type: object
+      properties:
+        image_id:
+          type: integer
     EmailRequest:
       type: object
       properties:

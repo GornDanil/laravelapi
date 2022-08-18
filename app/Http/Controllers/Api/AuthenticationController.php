@@ -30,7 +30,6 @@ class AuthenticationController extends Controller
     public function login(LoginRequest $request): UserResource
     {
         $data = $request->validated();
-
         $LoginDTO = new loginDTO($data);
 
         $user = $this->service->login($LoginDTO);
