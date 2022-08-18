@@ -33,7 +33,6 @@ class ResetPasswordController extends Controller
     public function forgotPassword(EmailRequest $request): Response
     {
         $passwordResetDTO = new PasswordResetDTO($request->validated());
-
         $passwordDTO = $passwordResetDTO->toArray();
 
         $status = Password::sendResetLink(

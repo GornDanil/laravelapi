@@ -2,13 +2,9 @@
 
 namespace App\Services\Departments;
 
-use App\Domain\Enums\Departments\DepartmentsType;
-use App\Exceptions\AccessException;
 use App\Models\Department;
-use App\Models\User;
 use App\Repositories\Departments\Abstracts\DepartmentRepositoryInterface;
 use App\Services\Departments\Abstracts\DepartmentsServiceInterface;
-use Exception;
 use Illuminate\Database\Eloquent\Collection;
 
 class DepartmentsService implements DepartmentsServiceInterface
@@ -25,7 +21,7 @@ class DepartmentsService implements DepartmentsServiceInterface
     /** @inheritDoc */
     public function departments(): Collection
     {
-            return $this->repository->with('workers.workerAtDepartment')->all();
+        return $this->repository->with('workers.workerAtDepartment')->all();
     }
 
     /** @inheritDoc */

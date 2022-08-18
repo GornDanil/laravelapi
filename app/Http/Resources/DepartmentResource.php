@@ -5,10 +5,8 @@ namespace App\Http\Resources;
 use App\Domain\Enums\Departments\DepartmentsType;
 use App\Models\Department;
 use App\Models\User;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use JsonSerializable;
 
 /**
  * @mixin Department
@@ -19,9 +17,9 @@ class DepartmentResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
-     * @return array|Arrayable|JsonSerializable
+     * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @var User|null $user */
         $user = $request->user();
@@ -31,7 +29,7 @@ class DepartmentResource extends JsonResource
         ];
 
         if ($user && in_array($user->role_type, [DepartmentsType::ADMIN, DepartmentsType::WORKER]) && $this->workers) {
-                $data['worker'] = WorkersResource::collection($this->workers);
+            $data['worker'] = WorkersResource::collection($this->workers);
         }
 
         return $data;

@@ -2,13 +2,9 @@
 
 namespace App\Models;
 
-use App\Notifications\PasswordResetNotification;
-use Eloquent;
 use Illuminate\Contracts\Auth\CanResetPassword;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 

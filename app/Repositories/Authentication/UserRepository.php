@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Authentication;
 
-use App\Domain\DTO\UpdateUserDTO;
 use App\Models\User;
 use App\Repositories\Authentication\Abstracts\UserRepositoryInterface;
 use Illuminate\Database\Query\Builder;
@@ -31,7 +30,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function userWorker(object $user): LengthAwarePaginator
     {
+        /** @var Builder $query */
         $query = $this->makeModel();
+
         return $query->select(['id', 'login', 'name', 'email'
         ])->where('departments_id', $user->departments_id)->paginate(10);
 
@@ -62,6 +63,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         /** @var Builder $query */
         $query = $this->makeModel();
+
         return $query->where('id', $user)->with(['workPosition', 'departmentName'])->first();
     }
 

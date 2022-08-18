@@ -35,7 +35,7 @@ class WorkersController extends Controller
      */
     public function workersList(): LengthAwarePaginator
     {
-        /** @var ?User $user */
+        /** @var User|null $user */
         $user = Auth::user();
         return $this->service->workers($user);
     }
@@ -52,9 +52,9 @@ class WorkersController extends Controller
 
     /**
      * @param int $user
-     * @return object|Response
+     * @return User|null
      */
-    public function userWorker(int $user): ?object
+    public function userWorker(int $user): ?User
     {
         return $this->service->showUserWorker($user);
     }
@@ -74,7 +74,7 @@ class WorkersController extends Controller
 
     /**
      * @param ImageUploadRequest $request
-     * @return ?UserIdResource
+     * @return UserIdResource|null
      */
     public function uploadImages(ImageUploadRequest $request): ?UserIdResource
     {
@@ -93,7 +93,7 @@ class WorkersController extends Controller
     {
         $user = Auth::user();
 
-        $this->service->updateImages($user, $id);
+        $this->service->updateImages($user->id, $id);
 
         return response(['message' => 'Аватарка обновлена']);
     }

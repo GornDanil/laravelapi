@@ -6,6 +6,7 @@ use App\Domain\Enums\Departments\DepartmentsType;
 use App\Exceptions\AccessException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DepartmentResource;
+use App\Models\User;
 use App\Services\Departments\Abstracts\DepartmentsServiceInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
@@ -22,12 +23,13 @@ class DepartmentsController extends Controller
     }
 
     /**
+     * @var User $user
      * @return AnonymousResourceCollection
      */
     public function departments(): AnonymousResourceCollection
     {
-
         $user = Auth::user();
+        
         if($user->role_type == null) {
             throw new AccessException();
         }

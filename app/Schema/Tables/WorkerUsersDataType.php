@@ -81,8 +81,6 @@ class WorkerUsersDataType extends BaseDataType
                     "label" => "department"
                 ]
             ],
-
-
             Model::CREATED_AT => [
                 "display_name" => "Дата создания",
                 "browse" => false,

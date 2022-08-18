@@ -163,7 +163,6 @@ class UserDataType extends BaseDataType
                     "pivot" => 0
                 ]
             ],
-
             "user_belongstomany_role_relationship" => [
                 "type" => FieldType::RELATIONSHIP,
                 "display_name" => "Дополнительные роли",

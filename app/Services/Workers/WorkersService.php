@@ -14,6 +14,7 @@ use App\Services\Workers\Abstracts\WorkersServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
+use Prettus\Repository\Exceptions\RepositoryException;
 
 class WorkersService implements WorkersServiceInterface
 {
@@ -26,8 +27,6 @@ class WorkersService implements WorkersServiceInterface
     /**
      *
      * @param UserRepositoryInterface $userRepository
-     * @param ImagesRepositoryInterface $imagesRepository
-
      * @param ImagesRepositoryInterface $imagesRepository
      */
     public function __construct(UserRepositoryInterface   $userRepository,
@@ -74,7 +73,7 @@ class WorkersService implements WorkersServiceInterface
     /**
      * @param User $user
      * @param ImageUploadDTO $imageDTO
-     * @return ?Image
+     * @return Image|null
      */
     public function uploadImages(User $user, ImageUploadDTO $imageDTO): ?Image
     {
@@ -94,8 +93,8 @@ class WorkersService implements WorkersServiceInterface
     }
 
     /** @inheritDoc */
-    public function updateImages(User $user, int $id): void
+    public function updateImages(int $user, int $id): void
     {
-            $this->userRepository->update(['image_id' => $id], $user->id);
+            $this->userRepository->update(['image_id' => $id], $user);
     }
 }

@@ -13,8 +13,9 @@ use Prettus\Repository\Exceptions\RepositoryException;
 interface WorkersServiceInterface
 {
     /**
-     * @param User $user
+     * @param User|null $user
      * @return LengthAwarePaginator
+     * @throws RepositoryException
      */
     public function workers(?User $user): LengthAwarePaginator;
 
@@ -25,23 +26,23 @@ interface WorkersServiceInterface
     public function showUserWorker(int $user): ?User;
 
     /**
-     * @param ?User $user
+     * @param User|null $user
      * @param UpdateUserDTO $updateUserDTO
      * @return void
      */
     public function updateUser(?User $user, UpdateUserDTO $updateUserDTO): void;
 
     /**
-     * @param User $user
+     * @param int $user
      * @param int $id
      * @return void
      */
-    public function updateImages(User $user,int $id): void;
+    public function updateImages(int $user,int $id): void;
 
     /**
      * @param User $user
      * @param ImageUploadDTO $imageDTO
-     * @return ?Image
+     * @return Image|null
      */
     public function uploadImages(User $user, ImageUploadDTO $imageDTO): ?Image;
 }

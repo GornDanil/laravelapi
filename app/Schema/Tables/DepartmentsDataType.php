@@ -41,8 +41,6 @@ class DepartmentsDataType extends BaseDataType
         ];
     }
 
-
-
     /**
      * @inheritdoc
      */

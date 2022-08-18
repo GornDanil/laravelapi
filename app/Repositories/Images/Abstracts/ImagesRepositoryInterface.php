@@ -2,8 +2,6 @@
 
 namespace App\Repositories\Images\Abstracts;
 
-use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
